@@ -24,7 +24,7 @@ public class ReportsByContact extends ReportsDashboard implements Initializable 
     }
 
     @Override
-    public void onActionCombo(ActionEvent actionEvent) throws Exception {
+    public void onActionCombo(ActionEvent actionEvent) {
         appointmentsByContact.clear();
         filterByContact(appCombo.getSelectionModel().getSelectedItem().getAppContId());
         appTable.setItems(appointmentsByContact);
@@ -42,7 +42,7 @@ public class ReportsByContact extends ReportsDashboard implements Initializable 
             e.printStackTrace();
         }
         appCombo.setItems(appointmentContacts);
-        System.out.println(appointmentContacts);
+        System.out.println("Appointment Contacts: " + appointmentContacts);
 
     }
 }

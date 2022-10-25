@@ -40,7 +40,7 @@ public class ReportsByMonth extends ReportsDashboard implements Initializable {
             e.printStackTrace();
         }
         appCombo.setItems(appointmentMonths);
-        System.out.println(appointmentMonths);
+        System.out.println("Appointment Months: " + appointmentMonths);
 
     }
 }

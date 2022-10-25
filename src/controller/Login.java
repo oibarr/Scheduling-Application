@@ -19,7 +19,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -56,7 +58,7 @@ public class Login implements Initializable {
         }
 
         try(FileWriter fileWriter = new FileWriter("login_activity.txt", true)){
-            String record = "User: " + username + " [" + loginOutcome + "]";
+            String record = "User: " + username + " [" + loginOutcome + "] " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
             System.out.println(record);
             fileWriter.write(record + "\n");
         } catch (IOException e) {
@@ -81,7 +83,7 @@ public class Login implements Initializable {
             setAlert("Error", "Username does not exist");
         } else if(validUsername(username)){
             if(loginActivity(validateLogin(username, password))){
-                System.out.println("User: " + username + "  logged in successfully!");
+                System.out.println("User: " + username + " logged in successfully!");
                 return true;
             }else {
                 setAlert("Error", "Incorrect password");

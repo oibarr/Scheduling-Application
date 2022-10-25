@@ -40,6 +40,6 @@ public class ReportsByType extends ReportsDashboard implements Initializable{
             e.printStackTrace();
         }
         appCombo.setItems(appointmentTypes);
-        System.out.println(appointmentTypes);
+        System.out.println("Appointment Types: " + appointmentTypes);
     }
 }

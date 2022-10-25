@@ -42,6 +42,6 @@ public class ReportsByLocation extends ReportsDashboard implements Initializable
             e.printStackTrace();
         }
         appCombo.setItems(appointmentLocations);
-        System.out.println(appointmentLocations);
+        System.out.println("Appointment Locations: " + appointmentLocations);
     }
 }
