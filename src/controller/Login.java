@@ -32,7 +32,6 @@ public class Login implements Initializable {
     @FXML private Label loginLabel;
     @FXML private Label usernameLabel;
     @FXML private Label passwordLabel;
-
     @FXML private TextField usernameTextField;
     @FXML private TextField passwordTextField;
     @FXML private Button submitButton;
@@ -140,6 +139,7 @@ public class Login implements Initializable {
 
         locationLabel.setText(locationLabel.getText() + ZoneId.systemDefault());
 
+        //auto-populates test user
         usernameTextField.setText("test");
         passwordTextField.setText("test");
 
@@ -156,6 +156,7 @@ public class Login implements Initializable {
 
         }
 
+        //creates "login_activity.txt" file if it does not yet exist or clears it if it does
         createTextFile();
 
     }

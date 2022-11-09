@@ -115,7 +115,7 @@ public class ModifyAppointment implements Initializable {
         }else if(AppointmentDAO.appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)) {
             setAlert("Error", "Appointment overlaps with existing customer appointments");
 
-        }else {
+        } else {
             LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
             LocalDateTime appEnd = LocalDateTime.of(appEndDate, appEndTime);
 
@@ -124,9 +124,11 @@ public class ModifyAppointment implements Initializable {
         }
         return false;
     }
+
+    //Saves appointment changes; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
         try {
-            if(validateInputs()){
+            if (validateInputs()){
                 Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
                 Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -139,6 +141,7 @@ public class ModifyAppointment implements Initializable {
         }
     }
 
+    //Cancels changes; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
@@ -152,7 +155,7 @@ public class ModifyAppointment implements Initializable {
         }
     }
 
-
+    //Populates selection from Appointments table
     public void sendApp(Appointment selectedApp) throws SQLException {
         modAppId.setText(String.valueOf(selectedApp.getAppId()));
         modAppTitle.setText(selectedApp.getAppTitle());
@@ -169,8 +172,6 @@ public class ModifyAppointment implements Initializable {
         modAppCont.setValue(ContactDAO.getContact(selectedApp.getAppContId()));
     }
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         modAppId.setDisable(true);
@@ -184,18 +185,22 @@ public class ModifyAppointment implements Initializable {
         //Third: Convert the created ZonedDateTime at the TARGET systemDefault ZoneId (using .withZoneSameInstant() and passing the TARGET ZoneId using ZoneId.of())
         //Finally: Convert the Target ZonedDateTime BACK into a LocalDateTime
 
+        //Business hours in EST
         ZonedDateTime startTime = ZonedDateTime.of(currentDay, LocalTime.of(8, 0), _EST);
         ZonedDateTime endTime = ZonedDateTime.of(currentDay, LocalTime.of(22, 0), _EST);
 
+        //Business hours converted to local time
         LocalTime appStartTime = startTime.withZoneSameInstant(localZoneId).toLocalTime();
         LocalTime appEndTime = endTime.withZoneSameInstant(localZoneId).toLocalTime();
 
+        //Creates appointment time slots in 15 minute increments
         while(appStartTime.isBefore(appEndTime.plusNanos(1)) && appStartTime != appEndTime){
             modAppStartTime.getItems().add(appStartTime);
             appStartTime = appStartTime.plusMinutes(15);
             modAppEnd.getItems().add(appStartTime);
         }
 
+        //Retrieves users, customers, and contacts from the database
         try {
             modAppUserId.setItems(UserDAO.getAllUsers());
             modAppCustId.setItems(CustomerDAO.getAllCustomers());
@@ -205,6 +210,5 @@ public class ModifyAppointment implements Initializable {
         }
 
     }
-
 
 }

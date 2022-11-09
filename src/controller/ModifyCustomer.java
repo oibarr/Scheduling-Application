@@ -35,6 +35,7 @@ public class ModifyCustomer implements Initializable {
     @FXML private TextField modCustAddress;
     @FXML private TextField modCustPost;
 
+    //Populates division selection based on country
     public void onActionCountry(ActionEvent actionEvent) throws SQLException {
         Country selectedCountry = modCustCountry.getValue();
         modCustDiv.setItems(DivisionDAO.getCountryDiv(selectedCountry.getCountryId()));
@@ -66,6 +67,7 @@ public class ModifyCustomer implements Initializable {
         return false;
     }
 
+    //Saves changes; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
 
         try{
@@ -83,6 +85,7 @@ public class ModifyCustomer implements Initializable {
 
     }
 
+    //Cancels changes; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
@@ -96,6 +99,7 @@ public class ModifyCustomer implements Initializable {
         }
     }
 
+    //Populates selection from Customer table
     public void sendCust(Customer selectedCust) throws SQLException {
         modCustId.setText(String.valueOf(selectedCust.getCustId()));
         modCustName.setText(selectedCust.getCustName());
@@ -111,6 +115,7 @@ public class ModifyCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         modCustId.setDisable(true);
 
+        //Retrieves countries from the database
         try{
             modCustCountry.setItems(CountryDAO.getAllCountries());
 //            modCustCountry.getSelectionModel().selectFirst();

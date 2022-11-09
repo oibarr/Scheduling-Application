@@ -122,6 +122,7 @@ public class AddAppointment implements Initializable {
         return false;
     }
 
+    //Saves appointment; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
         try{
             if(validateInputs()){
@@ -137,6 +138,7 @@ public class AddAppointment implements Initializable {
         }
     }
 
+    //Cancels appointment creation; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
@@ -150,16 +152,17 @@ public class AddAppointment implements Initializable {
         }
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addAppId.setDisable(true);
         //addAppUserId.setDisable(true);
         //addAppCustId.setDisable(true);
 
+        //Business hours in EST
         ZonedDateTime startTime = ZonedDateTime.of(currentDay, LocalTime.of(8, 0), _EST);
         ZonedDateTime endTime = ZonedDateTime.of(currentDay, LocalTime.of(22, 0), _EST);
 
+        //Business hours converted to local time
         LocalTime appStartTime = startTime.withZoneSameInstant(localZoneId).toLocalTime();
         LocalTime appEndTime = endTime.withZoneSameInstant(localZoneId).toLocalTime();
 
@@ -169,12 +172,14 @@ public class AddAppointment implements Initializable {
             addAppStartDate.setValue(currentDay.plusDays(1));
         }
 
+        //Creates appointment time slots in 15 minute increments
         while(appStartTime.isBefore(appEndTime.plusNanos(1)) && appStartTime != appEndTime){
             addAppStartTime.getItems().add(appStartTime);
             appStartTime = appStartTime.plusMinutes(15);
             addAppEnd.getItems().add(appStartTime);
         }
 
+        //initializes selections
         addAppStartTime.getSelectionModel().selectFirst();
         addAppEnd.getSelectionModel().selectFirst();
 

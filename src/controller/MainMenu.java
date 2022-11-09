@@ -53,6 +53,7 @@ public class MainMenu implements Initializable {
     @FXML private TableColumn<Customer, String> Phone;
     @FXML private TableColumn<Customer, Integer> Division_ID;
 
+    //Radio Buttons
     public void onActionAll(ActionEvent actionEvent) throws Exception {
         Appointments.clear();
         Appointments.addAll(AppointmentDAO.getAllAppointments());
@@ -67,8 +68,10 @@ public class MainMenu implements Initializable {
         Appointments.clear();
         Appointments.addAll(AppointmentDAO.filterByMonth());
     }
+
+    //Navigates to ModifyAppointment screen; obtains selection from Appointments table
     public void onActionModifyApp(ActionEvent actionEvent) throws IOException, SQLException {
-        if(appTable.getSelectionModel().getSelectedItem() != null){
+        if (appTable.getSelectionModel().getSelectedItem() != null){
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(("/view/ModifyAppointment.fxml")));
 //            FXMLLoader loader = new FXMLLoader();
@@ -93,6 +96,7 @@ public class MainMenu implements Initializable {
         }
     }
 
+    //Deletes appointment
     public void onActionDeleteApp(ActionEvent actionEvent) {
         if(appTable.getSelectionModel().getSelectedItem() != null) {
 
@@ -122,16 +126,19 @@ public class MainMenu implements Initializable {
         }
     }
 
+    //Navigates to AddCustomer screen
     public void onActionAddCust(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddCustomer.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Add Customer");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
+
+    //Navigates to ModifyCustomer screen; obtains selected customer
     public void onActionModifyCust(ActionEvent actionEvent) throws IOException, SQLException {
-        if(custTable.getSelectionModel().getSelectedItem() != null){
+        if (custTable.getSelectionModel().getSelectedItem() != null){
 
 
             FXMLLoader loader = new FXMLLoader((getClass().getResource("/view/ModifyCustomer.fxml")));
@@ -152,6 +159,7 @@ public class MainMenu implements Initializable {
 
     }
 
+    //Checks for customer appointment dependencies before deleting a Customer; allows the user to delete associated appointments and confirm deletion of the customer
     public void onActionDeleteCust(ActionEvent actionEvent) throws Exception {
         if(custTable.getSelectionModel().getSelectedItem() != null){
 
@@ -244,7 +252,6 @@ public class MainMenu implements Initializable {
         stage.show();
     }
 
-
     public void onActionAddApp(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointment.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -259,7 +266,6 @@ public class MainMenu implements Initializable {
 
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to Exit?");
 
-
         if(result.isPresent() && result.get() == ButtonType.OK){
             JDBC.closeConnection();
             System.exit(0);
@@ -269,6 +275,7 @@ public class MainMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //populates Appointments table
         Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appId"));
         Title.setCellValueFactory(new PropertyValueFactory<>("appTitle"));
         Description.setCellValueFactory(new PropertyValueFactory<>("appDesc"));
@@ -287,8 +294,7 @@ public class MainMenu implements Initializable {
         }
         appTable.setItems(Appointments);
 
-
-
+        //populates Customer table
         Customer_ID.setCellValueFactory(new PropertyValueFactory<>("custId"));
         Customer_Name.setCellValueFactory(new PropertyValueFactory<>("custName"));
         Address.setCellValueFactory(new PropertyValueFactory<>("custAddress"));
@@ -302,7 +308,6 @@ public class MainMenu implements Initializable {
             e.printStackTrace();
         }
         custTable.setItems(Customers);
-
 
     }
 }

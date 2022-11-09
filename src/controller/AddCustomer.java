@@ -34,6 +34,7 @@ public class AddCustomer implements Initializable {
     @FXML private TextField addCustAddress;
     @FXML private TextField addCustPost;
 
+    //Populates division selection based on country
     public void onActionCountry (ActionEvent actionEvent) throws SQLException{
         addCustDiv.setItems(DivisionDAO.getCountryDiv(addCustCountry.getValue().getCountryId()));
         addCustDiv.getSelectionModel().selectFirst();
@@ -63,6 +64,7 @@ public class AddCustomer implements Initializable {
         return false;
     }
 
+    //Saves customer; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
 
         try{
@@ -80,6 +82,7 @@ public class AddCustomer implements Initializable {
 
     }
 
+    //Cancels customer creation; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
@@ -98,6 +101,7 @@ public class AddCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addCustId.setDisable(true);
 
+        //Initializes selections
         try {
             addCustCountry.setItems(CountryDAO.getAllCountries());
             addCustCountry.getSelectionModel().selectFirst();

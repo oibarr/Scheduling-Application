@@ -16,7 +16,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-//        Locale.setDefault(new Locale("fr"));
+        //Translates login window to French when Locale is set to "fr"
+        //Locale.setDefault(new Locale("fr"));
         ResourceBundle resourceBundle = ResourceBundle.getBundle("resourceBundle/language");
 
 
@@ -31,10 +32,13 @@ public class Main extends Application {
 
     public static void main(String[] args){
 
+        //opens connection with database
         JDBC.openConnection();
 
+        //launches main application
         launch(args);
 
+        //closes connection with database
         JDBC.closeConnection();
 
     }
