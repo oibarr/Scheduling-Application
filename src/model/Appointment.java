@@ -16,8 +16,20 @@ public class Appointment {
     private int appContId;
 
 
-    public Appointment(int appId, String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustId, int appUserId, int appContId){
+    public Appointment(int appId, String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustId, int appUserId, int appContId) {
         this.appId = appId;
+        this.appTitle = appTitle;
+        this.appDesc = appDesc;
+        this.appLoc = appLoc;
+        this.appType = appType;
+        this.appStart = appStart;
+        this.appEnd = appEnd;
+        this.appCustId = appCustId;
+        this.appUserId = appUserId;
+        this.appContId = appContId;
+    }
+
+    public Appointment(String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustId, int appUserId, int appContId) {
         this.appTitle = appTitle;
         this.appDesc = appDesc;
         this.appLoc = appLoc;
@@ -33,7 +45,7 @@ public class Appointment {
         this.appType = appType;
     }
 
-    public Appointment(String appTitle, String appLoc){
+    public Appointment(String appTitle, String appLoc) {
         this.appTitle = appTitle;
         this.appLoc = appLoc;
         this.appType = appLoc;
