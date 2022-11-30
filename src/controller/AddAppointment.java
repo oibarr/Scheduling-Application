@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
@@ -25,58 +26,59 @@ import java.util.ResourceBundle;
 import static controller.Alert.setAlert;
 
 public class AddAppointment implements Initializable {
-    @FXML private TextField addAppId;
-    @FXML private TextField addAppTitle;
-    @FXML private TextField addAppDesc;
-    @FXML private TextField addAppType;
-    @FXML private TextField addAppLoc;
-    @FXML private DatePicker addAppStartDate;
-    @FXML private ComboBox<LocalTime> addAppStartTime;
-    @FXML private ComboBox<LocalTime> addAppEnd;
-    @FXML private ComboBox<Customer> addAppCustId;
-    @FXML private ComboBox<User> addAppUserId;
-    @FXML private ComboBox<Contact> addAppCont;
-    LocalDate currentDay = LocalDate.now();
-    LocalTime currentTime = LocalTime.now();
-    ZoneId localZoneId = ZoneId.systemDefault();
-    ZoneId _EST = ZoneId.of("America/New_York");
 
-    public void onActionStartDate(ActionEvent actionEvent) {
-//        addAppStartTime.setDisable(false);
-    }
+    @FXML
+    protected TextField id;
+    @FXML
+    protected TextField title;
+    @FXML
+    protected TextField desc;
+    @FXML
+    protected TextField type;
+    @FXML
+    protected TextField location;
+    @FXML
+    protected DatePicker startDate;
+    @FXML
+    protected ComboBox<LocalTime> startTime;
+    @FXML
+    protected ComboBox<LocalTime> end;
+    @FXML
+    protected ComboBox<Customer> customerId;
+    @FXML
+    protected ComboBox<User> userId;
+    @FXML
+    protected ComboBox<Contact> contactId;
 
-    public void onActionStartTime(ActionEvent actionEvent) {
-//        addAppEnd.setDisable(false);
-    }
+    //Time conversion
+    protected LocalDate currentDay = LocalDate.now();
+    protected LocalTime currentTime = LocalTime.now();
+    protected ZoneId localZoneId = ZoneId.systemDefault();
+    protected ZoneId _EST = ZoneId.of("America/New_York");
 
-    public void onActionEnd(ActionEvent actionEvent) {
-    }
+    //Input validation
+    boolean validateInputs() throws Exception {
+        String appTitle = title.getText();
+        String appDesc = desc.getText();
+        String appLoc = location.getText();
+        String appType = type.getText();
 
-    public void onActionContact(ActionEvent actionEvent) {
-    }
+        LocalDate appStartDate = startDate.getValue();
+        LocalTime appStartTime = startTime.getSelectionModel().getSelectedItem();
+        LocalDate appEndDate = startDate.getValue();
+        LocalTime appEndTime = end.getSelectionModel().getSelectedItem();
 
-    private boolean validateInputs() throws Exception {
-        String appTitle = addAppTitle.getText();
-        String appDesc = addAppDesc.getText();
-        String appLoc = addAppLoc.getText();
-        String appType = addAppType.getText();
+        int appCustId = customerId.getValue().getCustId();
+        int appUserId = userId.getValue().getUserId();
+        int appContId = contactId.getValue().getContId();
 
-        LocalDate appStartDate = addAppStartDate.getValue();
-        LocalTime appStartTime = addAppStartTime.getSelectionModel().getSelectedItem();
-        LocalDate appEndDate = addAppStartDate.getValue();
-        LocalTime appEndTime = addAppEnd.getSelectionModel().getSelectedItem();
-
-        int appCustId = addAppCustId.getValue().getCustId();
-        int appUserId = addAppUserId.getValue().getUserId();
-        int appContId = addAppCont.getValue().getContId();
-
-        if(appTitle.isEmpty() || appTitle.isBlank()) {
+        if (appTitle.isEmpty() || appTitle.isBlank()){
             setAlert("Error", "Appointment must have a title");
 
-        }else if(appDesc.isEmpty() || appDesc.isBlank()) {
+        } else if (appDesc.isEmpty() || appDesc.isBlank()){
             setAlert("Error", "Appointment must have a description");
 
-        }else if(appType.isEmpty() || appType.isBlank()) {
+        } else if (appType.isEmpty() || appType.isBlank()){
             setAlert("Error", "Appointment must have a type");
 
         }else if(appLoc.isEmpty() || appLoc.isBlank()) {
@@ -109,25 +111,39 @@ public class AddAppointment implements Initializable {
         }else if(appStartTime.equals(appEndTime)) {
             setAlert("Error", "Appointment cannot start and end at the same time");
 
-        }else if(AppointmentDAO.appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)) {
+        }else if (AppointmentDAO.appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)){
             setAlert("Error", "Appointment overlaps with existing customer appointments");
 
-        }else {
+        } else {
             LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
             LocalDateTime appEnd = LocalDateTime.of(appEndDate, appEndTime);
 
-            AppointmentDAO.addAppointment(appTitle, appDesc, appLoc, appType, appStart, appEnd, appCustId, appUserId, appContId);
+            saveAppointment(new Appointment(appTitle, appDesc, appLoc, appType, appStart, appEnd, appCustId, appUserId, appContId));
             return true;
         }
         return false;
     }
 
+    //Creates an appointment
+    public void saveAppointment(Appointment appointment) {
+        AppointmentDAO.addAppointment(
+                appointment.getAppTitle(),
+                appointment.getAppDesc(),
+                appointment.getAppType(),
+                appointment.getAppLoc(),
+                appointment.getAppStart(),
+                appointment.getAppEnd(),
+                appointment.getAppCustId(),
+                appointment.getAppUserId(),
+                appointment.getAppContId());
+    }
+
     //Saves appointment; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
-        try{
-            if(validateInputs()){
+        try {
+            if (validateInputs()){
                 Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Scheduling Application");
                 stage.centerOnScreen();
@@ -154,43 +170,41 @@ public class AddAppointment implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addAppId.setDisable(true);
-        //addAppUserId.setDisable(true);
-        //addAppCustId.setDisable(true);
+        id.setDisable(true);
 
         //Business hours in EST
-        ZonedDateTime startTime = ZonedDateTime.of(currentDay, LocalTime.of(8, 0), _EST);
-        ZonedDateTime endTime = ZonedDateTime.of(currentDay, LocalTime.of(22, 0), _EST);
+        ZonedDateTime zonedStartTime = ZonedDateTime.of(currentDay, LocalTime.of(8, 0), _EST);
+        ZonedDateTime zonedEndTime = ZonedDateTime.of(currentDay, LocalTime.of(22, 0), _EST);
 
         //Business hours converted to local time
-        LocalTime appStartTime = startTime.withZoneSameInstant(localZoneId).toLocalTime();
-        LocalTime appEndTime = endTime.withZoneSameInstant(localZoneId).toLocalTime();
+        LocalTime appStartLocalTime = zonedStartTime.withZoneSameInstant(localZoneId).toLocalTime();
+        LocalTime appEndLocalTime = zonedEndTime.withZoneSameInstant(localZoneId).toLocalTime();
 
-        addAppStartDate.setValue(currentDay);
+        startDate.setValue(currentDay);
 
-        if(currentTime.isAfter(appEndTime.minusMinutes(15))){
-            addAppStartDate.setValue(currentDay.plusDays(1));
+        if (currentTime.isAfter(appEndLocalTime.minusMinutes(15))){
+            startDate.setValue(currentDay.plusDays(1));
         }
 
         //Creates appointment time slots in 15 minute increments
-        while(appStartTime.isBefore(appEndTime.plusNanos(1)) && appStartTime != appEndTime){
-            addAppStartTime.getItems().add(appStartTime);
-            appStartTime = appStartTime.plusMinutes(15);
-            addAppEnd.getItems().add(appStartTime);
+        while (appStartLocalTime.isBefore(appEndLocalTime.plusNanos(1)) && appStartLocalTime != appEndLocalTime) {
+            startTime.getItems().add(appStartLocalTime);
+            appStartLocalTime = appStartLocalTime.plusMinutes(15);
+            end.getItems().add(appStartLocalTime);
         }
 
         //initializes selections
-        addAppStartTime.getSelectionModel().selectFirst();
-        addAppEnd.getSelectionModel().selectFirst();
+        startTime.getSelectionModel().selectFirst();
+        end.getSelectionModel().selectFirst();
 
         try {
-            addAppUserId.setItems(UserDAO.getAllUsers());
-            addAppCustId.setItems(CustomerDAO.getAllCustomers());
-            addAppCont.setItems(ContactDAO.getAllContacts());
+            userId.setItems(UserDAO.getAllUsers());
+            customerId.setItems(CustomerDAO.getAllCustomers());
+            contactId.setItems(ContactDAO.getAllContacts());
 
-            addAppUserId.getSelectionModel().selectFirst();
-            addAppCustId.getSelectionModel().selectFirst();
-            addAppCont.getSelectionModel().selectFirst();
+            userId.getSelectionModel().selectFirst();
+            customerId.getSelectionModel().selectFirst();
+            contactId.getSelectionModel().selectFirst();
 
         } catch (Exception e) {
             e.printStackTrace();
