@@ -299,7 +299,7 @@ public class MainMenu implements Initializable {
         Customer_Name.setCellValueFactory(new PropertyValueFactory<>("custName"));
         Address.setCellValueFactory(new PropertyValueFactory<>("custAddress"));
         Postal_Code.setCellValueFactory(new PropertyValueFactory<>("custPost"));
-        Phone.setCellValueFactory(new PropertyValueFactory<>("custNum"));
+        Phone.setCellValueFactory(new PropertyValueFactory<>("custPhone"));
         Division_ID.setCellValueFactory(new PropertyValueFactory<>("custDivId"));
 
         try {

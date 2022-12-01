@@ -193,7 +193,7 @@ public class AddAppointment implements Initializable {
             end.getItems().add(appStartLocalTime);
         }
 
-        //initializes selections
+        //Initializes selections
         startTime.getSelectionModel().selectFirst();
         end.getSelectionModel().selectFirst();
 

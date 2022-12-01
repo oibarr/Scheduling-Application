@@ -5,23 +5,31 @@ public class Customer {
     private String custName;
     private String custAddress;
     private String custPost;
-    private String custNum;
+    private String custPhone;
     private int custDivId;
 
-    public Customer(int custId, String custName, String custAddress, String custPost, String custNum, int custDivId){
+    public Customer(int custId, String custName, String custAddress, String custPost, String custPhone, int custDivId) {
         this.custId = custId;
         this.custName = custName;
         this.custAddress = custAddress;
         this.custPost = custPost;
-        this.custNum = custNum;
+        this.custPhone = custPhone;
         this.custDivId = custDivId;
     }
 
-    public int getCustId(){
+    public Customer(String custName, String custAddress, String custPost, String custPhone, int custDivId) {
+        this.custName = custName;
+        this.custAddress = custAddress;
+        this.custPost = custPost;
+        this.custPhone = custPhone;
+        this.custDivId = custDivId;
+    }
+
+    public int getCustId() {
         return custId;
     }
 
-    public void setCustId(int custId){
+    public void setCustId(int custId) {
         this.custId = custId;
     }
 
@@ -41,23 +49,23 @@ public class Customer {
         this.custAddress = custAddress;
     }
 
-    public String getCustPost(){
+    public String getCustPost() {
         return custPost;
     }
 
-    public void setCustPost(String custPost){
+    public void setCustPost(String custPost) {
         this.custPost = custPost;
     }
 
-    public String getCustNum(){
-        return custNum;
+    public String getCustPhone() {
+        return custPhone;
     }
 
-    public void set(String custNum){
-        this.custNum = custNum;
+    public void set(String custNum) {
+        this.custPhone = custNum;
     }
 
-    public int getCustDivId(){
+    public int getCustDivId() {
         return custDivId;
     }
 
