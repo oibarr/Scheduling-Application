@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
+import model.Customer;
 import model.Division;
 
 import java.io.IOException;
@@ -26,51 +27,69 @@ import java.util.ResourceBundle;
 import static controller.Alert.setAlert;
 
 public class AddCustomer implements Initializable {
-    @FXML private ComboBox<Country> addCustCountry;
-    @FXML private ComboBox<Division> addCustDiv;
-    @FXML private TextField addCustId;
-    @FXML private TextField addCustName;
-    @FXML private TextField addCustNum;
-    @FXML private TextField addCustAddress;
-    @FXML private TextField addCustPost;
+    @FXML
+    protected ComboBox<Country> country;
+    @FXML
+    protected ComboBox<Division> division;
+    @FXML
+    protected TextField id;
+    @FXML
+    protected TextField name;
+    @FXML
+    protected TextField phone;
+    @FXML
+    protected TextField address;
+    @FXML
+    protected TextField postal;
 
     //Populates division selection based on country
-    public void onActionCountry (ActionEvent actionEvent) throws SQLException{
-        addCustDiv.setItems(DivisionDAO.getCountryDiv(addCustCountry.getValue().getCountryId()));
-        addCustDiv.getSelectionModel().selectFirst();
+    public void onActionCountry(ActionEvent actionEvent) throws SQLException {
+        division.setItems(DivisionDAO.getCountryDiv(country.getValue().getCountryId()));
+        division.getSelectionModel().selectFirst();
     }
 
-    private boolean validateInputs(){
-        String custName = addCustName.getText();
-        String custAddress = addCustAddress.getText();
-        String custPost = addCustPost.getText();
-        String custNum = addCustNum.getText();
+    //Input validation
+    public boolean validateInputs() {
+        String custName = name.getText();
+        String custAddress = address.getText();
+        String custPostal = postal.getText();
+        String custPhone = phone.getText();
 
-        if(custName.isEmpty() || custName.isBlank()){
+        if (custName.isEmpty() || custName.isBlank()){
             setAlert("Error", "Customer must have a name");
-        }else if(custAddress.isEmpty() || custAddress.isBlank()){
+        } else if (custAddress.isEmpty() || custAddress.isBlank()){
             setAlert("Error", "Customer must have an address");
-        }else if(custPost.isEmpty() || custPost.isBlank()){
+        } else if (custPostal.isEmpty() || custPostal.isBlank()){
             setAlert("Error", "Customer must have a postal code");
-        }else if(custNum.isEmpty() || custNum.isBlank()){
+        } else if (custPhone.isEmpty() || custPhone.isBlank()){
             setAlert("Error", "Customer must have a phone number");
-        }else {
-            Division custDiv = addCustDiv.getValue();
+        } else {
+            Division custDiv = division.getValue();
             int custDivId = custDiv.getDivId();
 
-            CustomerDAO.addCustomer(custName, custAddress, custPost, custNum, custDivId);
+            saveCustomer(new Customer(custName, custAddress, custPostal, custPhone, custDivId));
+//            CustomerDAO.addCustomer(custName, custAddress, custPostal, custPhone, custDivId);
             return true;
         }
         return false;
     }
 
+    //Saves Customer
+    public void saveCustomer(Customer customer) {
+        CustomerDAO.addCustomer(
+                customer.getCustName(),
+                customer.getCustAddress(),
+                customer.getCustPost(),
+                customer.getCustPhone(),
+                customer.getCustDivId());
+    }
+
     //Saves customer; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
-
-        try{
-            if(validateInputs()){
+        try {
+            if (validateInputs()){
                 Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Scheduling Application");
                 stage.centerOnScreen();
@@ -79,7 +98,6 @@ public class AddCustomer implements Initializable {
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
     //Cancels customer creation; navigates back to MainMenu
@@ -99,19 +117,18 @@ public class AddCustomer implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addCustId.setDisable(true);
+        id.setDisable(true);
 
         //Initializes selections
         try {
-            addCustCountry.setItems(CountryDAO.getAllCountries());
-            addCustCountry.getSelectionModel().selectFirst();
+            country.setItems(CountryDAO.getAllCountries());
+            country.getSelectionModel().selectFirst();
 
-            addCustDiv.setItems(DivisionDAO.getCountryDiv(addCustCountry.getValue().getCountryId()));
-            addCustDiv.getSelectionModel().selectFirst();
+            division.setItems(DivisionDAO.getCountryDiv(country.getValue().getCountryId()));
+            division.getSelectionModel().selectFirst();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DivisionDAO {
-
     public static Division getDiv(int divisionId) throws SQLException{
         String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionId;
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
