@@ -35,5 +35,10 @@
             </children>
         </AnchorPane>
         <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0" prefWidth="54.0" text="Exit" />
+        <Label fx:id="countLabel" layoutX="14.0" layoutY="392.0" text="Total Count: ">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>
