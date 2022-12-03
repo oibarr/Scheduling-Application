@@ -58,7 +58,7 @@ public class UserDAO {
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
 
-        if (result.next()) {
+        if (result.next()){
             return new User(
                     result.getInt("User_ID"),
                     result.getString("User_Name"),
@@ -68,7 +68,19 @@ public class UserDAO {
         return null;
     }
 
+    public static User getUser(String userName) throws SQLException {
+        String sqlStatement = "SELECT * FROM users WHERE User_Name = \"" + userName + "\"";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
+        ResultSet result = preparedStatement.executeQuery();
 
-
+        if (result.next()){
+            return new User(
+                    result.getInt("User_ID"),
+                    result.getString("User_Name"),
+                    result.getString("Password")
+            );
+        }
+        return null;
+    }
 
 }

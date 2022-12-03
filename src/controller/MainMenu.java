@@ -30,18 +30,27 @@ import java.util.ResourceBundle;
 import static controller.Alert.setAlert;
 
 public class MainMenu implements Initializable {
-    ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
-    ObservableList<Customer> Customers = FXCollections.observableArrayList();
+    private final ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
+    private final ObservableList<Customer> Customers = FXCollections.observableArrayList();
 
-    @FXML private TableView<Appointment> appTable;
-    @FXML private TableColumn<Appointment, Integer> Appointment_ID;
-    @FXML private TableColumn<Appointment, String> Title;
-    @FXML private TableColumn<Appointment, String> Description;
-    @FXML private TableColumn<Appointment, String> Location;
-    @FXML private TableColumn<Appointment, String> Type;
-    @FXML private TableColumn<Appointment, Calendar> Start;
-    @FXML private TableColumn<Appointment, Calendar> End;
-    @FXML private TableColumn<Appointment, Integer> App_Customer_ID;
+    @FXML
+    private TableView<Appointment> appTable;
+    @FXML
+    private TableColumn<Appointment, Integer> Appointment_ID;
+    @FXML
+    private TableColumn<Appointment, String> Title;
+    @FXML
+    private TableColumn<Appointment, String> Description;
+    @FXML
+    private TableColumn<Appointment, String> Location;
+    @FXML
+    private TableColumn<Appointment, String> Type;
+    @FXML
+    private TableColumn<Appointment, Calendar> Start;
+    @FXML
+    private TableColumn<Appointment, Calendar> End;
+    @FXML
+    private TableColumn<Appointment, Integer> App_Customer_ID;
     @FXML private TableColumn<Appointment, Integer> User_ID;
     @FXML private TableColumn<Appointment, Integer> Contact_ID;
 
@@ -74,18 +83,13 @@ public class MainMenu implements Initializable {
         if (appTable.getSelectionModel().getSelectedItem() != null){
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(("/view/ModifyAppointment.fxml")));
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/view/ModifyAppointment.fxml"));
             Parent root = loader.load();
-//            loader.load();
 
             ModifyAppointment modifyAppointmentControllerReference = loader.getController();
             modifyAppointmentControllerReference.sendApp(appTable.getSelectionModel().getSelectedItem());
 
             Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-//            Parent scene = loader.getRoot();
             stage.setTitle("Modify Appointment");
-//            stage.setScene(new Scene(scene));
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();

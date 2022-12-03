@@ -25,19 +25,20 @@
                         <TableColumn fx:id="Location" prefWidth="75.0" text="Location" />
                         <TableColumn fx:id="Type" prefWidth="75.0" text="Type" />
                         <TableColumn fx:id="Start" prefWidth="75.0" text="Start" />
-                        <TableColumn fx:id="End" prefWidth="75.0" text="End" />
-                        <TableColumn fx:id="App_Customer_ID" prefWidth="75.0" text="Customer ID" />
-                        <TableColumn fx:id="User_ID" prefWidth="75.0" text="User ID" />
-                        <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID" />
+                        <TableColumn fx:id="End" prefWidth="75.0" text="End"/>
+                        <TableColumn fx:id="App_Customer_ID" prefWidth="75.0" text="Customer ID"/>
+                        <TableColumn fx:id="User_ID" prefWidth="75.0" text="User ID"/>
+                        <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID"/>
                     </columns>
                 </TableView>
-                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" onAction="#onActionCombo" prefWidth="150.0" />
+                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" onAction="#onActionCombo" prefWidth="150.0"/>
             </children>
         </AnchorPane>
-        <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0" prefWidth="54.0" text="Exit" />
+        <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0"
+                prefWidth="54.0" text="Exit"/>
         <Label fx:id="countLabel" layoutX="14.0" layoutY="392.0" text="Total Count: ">
             <font>
-                <Font name="System Bold" size="24.0" />
+                <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
     </children>

@@ -4,13 +4,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsByType">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ReportsByType">
     <children>
         <AnchorPane prefHeight="375.0" prefWidth="750.0">
             <children>
                 <Label fx:id="appLabel" layoutX="14.0" layoutY="30.0" text="Appointments">
                     <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="System Bold" size="24.0"/>
                     </font>
                 </Label>
                 <TableView fx:id="appTable" layoutX="25.0" layoutY="92.0" prefHeight="250.0" prefWidth="750.0">
@@ -21,20 +23,21 @@
                         <TableColumn fx:id="Location" prefWidth="75.0" text="Location" />
                         <TableColumn fx:id="Type" prefWidth="75.0" text="Type" />
                         <TableColumn fx:id="Start" prefWidth="75.0" text="Start" />
-                        <TableColumn fx:id="End" prefWidth="75.0" text="End" />
-                        <TableColumn fx:id="App_Customer_ID" prefWidth="75.0" text="Customer ID" />
-                        <TableColumn fx:id="User_ID" prefWidth="75.0" text="User ID" />
-                        <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID" />
+                        <TableColumn fx:id="End" prefWidth="75.0" text="End"/>
+                        <TableColumn fx:id="App_Customer_ID" prefWidth="75.0" text="Customer ID"/>
+                        <TableColumn fx:id="User_ID" prefWidth="75.0" text="User ID"/>
+                        <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID"/>
                     </columns>
                 </TableView>
-                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" onAction="#onActionCombo" prefWidth="150.0" />
+                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" onAction="#onActionCombo" prefWidth="150.0"/>
             </children>
         </AnchorPane>
-        <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0" prefWidth="54.0" text="Exit" />
-      <Label fx:id="countLabel" layoutX="14.0" layoutY="392.0" text="Total Count: ">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
+        <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0"
+                prefWidth="54.0" text="Exit"/>
+        <Label fx:id="countLabel" layoutX="14.0" layoutY="392.0" text="Total Count: ">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>
