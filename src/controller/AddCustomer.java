@@ -74,7 +74,7 @@ public class AddCustomer implements Initializable {
         return false;
     }
 
-    //Saves Customer
+    //Saves a new customer
     public void saveCustomer(Customer customer) {
         CustomerDAO.addCustomer(
                 customer.getCustName(),

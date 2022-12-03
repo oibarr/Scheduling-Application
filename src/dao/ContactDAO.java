@@ -19,16 +19,15 @@ public class ContactDAO {
         ResultSet result = preparedStatement.executeQuery();
 
         while(result.next()){
-            int contId = result.getInt("Contact_ID");
-            String contName = result.getString("Contact_Name");
-            String contEmail = result.getString("Email");
-
-            Contact contResult = new Contact(contId, contName, contEmail);
-            allContacts.add(contResult);
-
+            allContacts.add(
+                    new Contact(
+                            result.getInt("Contact_ID"),
+                            result.getString("Contact_Name"),
+                            result.getString("Email")
+                    )
+            );
         }
         return allContacts;
-
     }
 
     public static Contact getContact(int contId) throws SQLException{

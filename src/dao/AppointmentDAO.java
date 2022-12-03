@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class AppointmentDAO {
 
@@ -24,28 +23,27 @@ public class AppointmentDAO {
         ResultSet result = preparedStatement.executeQuery();
 
         while (result.next()) {
-            Appointment appResult = new Appointment(
-                    result.getInt("Appointment_ID"),
-                    result.getString("Title"),
-                    result.getString("Description"),
-                    result.getString("Location"),
-                    result.getString("Type"),
-                    result.getTimestamp("Start").toLocalDateTime(),
-                    result.getTimestamp("End").toLocalDateTime(),
-                    result.getInt("Customer_ID"),
-                    result.getInt("User_ID"),
-                    result.getInt("Contact_ID")
+            allAppointments.add(
+                    new Appointment(
+                            result.getInt("Appointment_ID"),
+                            result.getString("Title"),
+                            result.getString("Description"),
+                            result.getString("Location"),
+                            result.getString("Type"),
+                            result.getTimestamp("Start").toLocalDateTime(),
+                            result.getTimestamp("End").toLocalDateTime(),
+                            result.getInt("Customer_ID"),
+                            result.getInt("User_ID"),
+                            result.getInt("Contact_ID")
+                    )
             );
-
-            allAppointments.add(appResult);
         }
-
         return allAppointments;
     }
 
     public static void addAppointment(String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustID, int appUserId, int appContId) {
         try {
-            String sqlStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, /*Create_Date, Created_By, Last_Update, Last_Updated_By, */Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sqlStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
 
             preparedStatement.setString(1, appTitle);
@@ -67,7 +65,7 @@ public class AppointmentDAO {
 
     public static void modAppointment(int appId, String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustID, int appUserId, int appContId) {
         try {
-            String sqlStatement = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, /*Last_Update = ?, Last_Updated_By = ?, */Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+            String sqlStatement = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
             PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
 
             preparedStatement.setString(1, appTitle);
@@ -142,20 +140,20 @@ public class AppointmentDAO {
         ResultSet result = preparedStatement.executeQuery();
 
         while (result.next()) {
-            Appointment appResult = new Appointment(
-                    result.getInt("Appointment_ID"),
-                    result.getString("Title"),
-                    result.getString("Description"),
-                    result.getString("Location"),
-                    result.getString("Type"),
-                    result.getTimestamp("Start").toLocalDateTime(),
-                    result.getTimestamp("End").toLocalDateTime(),
-                    result.getInt("Customer_ID"),
-                    result.getInt("User_ID"),
-                    result.getInt("Contact_ID")
+            curWeekApps.add(
+                    new Appointment(
+                            result.getInt("Appointment_ID"),
+                            result.getString("Title"),
+                            result.getString("Description"),
+                            result.getString("Location"),
+                            result.getString("Type"),
+                            result.getTimestamp("Start").toLocalDateTime(),
+                            result.getTimestamp("End").toLocalDateTime(),
+                            result.getInt("Customer_ID"),
+                            result.getInt("User_ID"),
+                            result.getInt("Contact_ID")
+                    )
             );
-
-            curWeekApps.add(appResult);
         }
         return curWeekApps;
     }
@@ -167,23 +165,24 @@ public class AppointmentDAO {
         ResultSet result = preparedStatement.executeQuery();
 
         while (result.next()) {
-            Appointment appResult = new Appointment(
-                    result.getInt("Appointment_ID"),
-                    result.getString("Title"),
-                    result.getString("Description"),
-                    result.getString("Location"),
-                    result.getString("Type"),
-                    result.getTimestamp("Start").toLocalDateTime(),
-                    result.getTimestamp("End").toLocalDateTime(),
-                    result.getInt("Customer_ID"),
-                    result.getInt("User_ID"),
-                    result.getInt("Contact_ID")
+            curMonthApps.add(
+                    new Appointment(
+                            result.getInt("Appointment_ID"),
+                            result.getString("Title"),
+                            result.getString("Description"),
+                            result.getString("Location"),
+                            result.getString("Type"),
+                            result.getTimestamp("Start").toLocalDateTime(),
+                            result.getTimestamp("End").toLocalDateTime(),
+                            result.getInt("Customer_ID"),
+                            result.getInt("User_ID"),
+                            result.getInt("Contact_ID")
+                    )
             );
-
-            curMonthApps.add(appResult);
         }
         return curMonthApps;
     }
+
     public static ObservableList<Appointment> getAllAppointmentTypes() throws Exception {
 
         ObservableList<Appointment> allAppointmentTypes = FXCollections.observableArrayList();
@@ -225,7 +224,6 @@ public class AppointmentDAO {
         String sqlStatement = "SELECT Title, Start FROM appointments GROUP BY MONTH(Start)";
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM");
 
         while(result.next()){
             appointmentMonths.add(
@@ -256,14 +254,12 @@ public class AppointmentDAO {
         return appointmentContacts;
     }
 
-    /*public static ObservableList<Appointment> getAppointmentsByContact(int contID) throws Exception {
-
+    public static ObservableList<Appointment> getAppointmentsByUser(int userId) throws Exception {
         ObservableList<Appointment> appointmentsByContact = FXCollections.observableArrayList();
-        String sqlStatement = "SELECT * FROM appointments AS a INNER JOIN contacts AS c ON a.Contact_ID = c.Contact_ID WHERE a.Contact_ID = " + contID;
+        String sqlStatement = "SELECT * FROM appointments AS a INNER JOIN users AS u ON a.User_ID = u.User_ID WHERE a.User_ID = " + userId;
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
-
-        while(result.next()){
+        while (result.next()) {
             appointmentsByContact.add(
                     new Appointment(
                             result.getInt("Appointment_ID"),
@@ -280,6 +276,5 @@ public class AppointmentDAO {
             );
         }
         return appointmentsByContact;
-    }*/
-
+    }
 }

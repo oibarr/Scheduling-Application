@@ -22,7 +22,6 @@ public class Main extends Application {
 
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-//        stage.setTitle("Scheduling Application");
         stage.setTitle(resourceBundle.getString("Title"));
         stage.setScene(new Scene(root));
         stage.centerOnScreen();

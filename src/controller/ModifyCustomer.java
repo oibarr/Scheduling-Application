@@ -22,6 +22,7 @@ public class ModifyCustomer extends AddCustomer implements Initializable {
         division.setDisable(false);
     }
 
+    //Saves modifications
     @Override
     public void saveCustomer(Customer customer) {
         CustomerDAO.modCustomer(

@@ -30,5 +30,4 @@ public class ReportsByLocation extends ReportsByMonth implements Initializable {
         appCombo.setItems(appointmentFilter);
         System.out.println("Appointment Locations: " + appointmentFilter);
     }
-
 }
