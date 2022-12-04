@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 
 import static controller.Alert.setAlert;
 
-public class MainMenu implements Initializable {
+public class MainMenu implements Initializable, Alert {
     private final ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
     private final ObservableList<Customer> Customers = FXCollections.observableArrayList();
 
@@ -51,16 +51,25 @@ public class MainMenu implements Initializable {
     private TableColumn<Appointment, Calendar> End;
     @FXML
     private TableColumn<Appointment, Integer> App_Customer_ID;
-    @FXML private TableColumn<Appointment, Integer> User_ID;
-    @FXML private TableColumn<Appointment, Integer> Contact_ID;
+    @FXML
+    private TableColumn<Appointment, Integer> User_ID;
+    @FXML
+    private TableColumn<Appointment, Integer> Contact_ID;
 
-    @FXML private TableView<Customer> custTable;
-    @FXML private TableColumn<Customer, Integer> Customer_ID;
-    @FXML private TableColumn<Customer, String> Customer_Name;
-    @FXML private TableColumn<Customer, String> Address;
-    @FXML private TableColumn<Customer, String> Postal_Code;
-    @FXML private TableColumn<Customer, String> Phone;
-    @FXML private TableColumn<Customer, Integer> Division_ID;
+    @FXML
+    private TableView<Customer> custTable;
+    @FXML
+    private TableColumn<Customer, Integer> Customer_ID;
+    @FXML
+    private TableColumn<Customer, String> Customer_Name;
+    @FXML
+    private TableColumn<Customer, String> Address;
+    @FXML
+    private TableColumn<Customer, String> Postal_Code;
+    @FXML
+    private TableColumn<Customer, String> Phone;
+    @FXML
+    private TableColumn<Customer, Integer> Division_ID;
 
     //Radio Buttons
     public void onActionAll(ActionEvent actionEvent) throws Exception {
@@ -144,7 +153,6 @@ public class MainMenu implements Initializable {
     public void onActionModifyCust(ActionEvent actionEvent) throws IOException, SQLException {
         if (custTable.getSelectionModel().getSelectedItem() != null){
 
-
             FXMLLoader loader = new FXMLLoader((getClass().getResource("/view/ModifyCustomer.fxml")));
             Parent root = loader.load();
 
@@ -163,16 +171,32 @@ public class MainMenu implements Initializable {
 
     }
 
+    //Checks for associated appointments
+    public static boolean checkAssociatedApps(int custId) throws Exception {
+        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        ObservableList<Appointment> associatedAppointments = FXCollections.observableArrayList();
+
+        //Lambda #2
+        appointments.forEach(a -> {
+            if (custId == a.getAppCustId()){
+                associatedAppointments.add(a);
+            }
+        });
+
+        return associatedAppointments.size() != 0;
+
+    }
+
     //Checks for customer appointment dependencies before deleting a Customer; allows the user to delete associated appointments and confirm deletion of the customer
     public void onActionDeleteCust(ActionEvent actionEvent) throws Exception {
-        if(custTable.getSelectionModel().getSelectedItem() != null){
+        if (custTable.getSelectionModel().getSelectedItem() != null){
 
             Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to delete selected customer(s)?");
 
-            if(result.isPresent() && result.get() == ButtonType. OK){
+            if (result.isPresent() && result.get() == ButtonType.OK){
                 int custId = custTable.getSelectionModel().getSelectedItem().getCustId();
 
-                if(CustomerDAO.checkAssociatedApps(custId)){
+                if (checkAssociatedApps(custId)){
 
                     setAlert("Warning", "Customer has existing associated appointments");
 
@@ -180,7 +204,7 @@ public class MainMenu implements Initializable {
                     result = setAlert("Confirmation", "Would you like to delete associated appointments\nand proceed with customer deletion?");
 
 
-                    if(result.isPresent() && result.get() == ButtonType.OK){
+                    if (result.isPresent() && result.get() == ButtonType.OK){
                         CustomerDAO.deleteAssociatedApps(custId);
                         CustomerDAO.deleteCustomer(custId);
                         custTable.getItems().clear();
@@ -211,16 +235,6 @@ public class MainMenu implements Initializable {
             setAlert("Error", "No customer(s) selected");
         }
     }
-
-    //SELECT * FROM appointments WHERE Start BETWEEN
-
-    //overlap occurs when start time falls within the window, end time is within the window, and both start and end are within the window.
-    //start >=  windowStart && start < windowEnd
-    //end == windowEnd
-    //end > windowStart && end <= windowEnd
-    //start <= windowStart && end >== windowEnd
-
-    //a.isBefore(appStart) || a.isEqual(appStart)
 
     //Reports Dashboard
     public void onActionReportByType(ActionEvent actionEvent) throws IOException {

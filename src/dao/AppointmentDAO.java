@@ -9,9 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class AppointmentDAO {
 
@@ -99,38 +97,6 @@ public class AppointmentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean appOverlapCheck(int custId, int appId, LocalDate appStartDate, LocalTime appStartTime, LocalDate appEndDate, LocalTime appEndTime) throws Exception {
-
-        if(appStartDate.isBefore(LocalDate.now())) return false;
-
-        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
-
-        LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
-        LocalDateTime appEnd = LocalDateTime.of(appEndDate, appEndTime);
-
-        //start >= aStart && start < aEnd
-
-        //end > aStart && end <= aEnd
-
-        //start <= aStart && end >= aEnd
-
-
-        for (Appointment a : appointments) {
-            LocalDateTime start = a.getAppStart();
-            LocalDateTime end = a.getAppEnd();
-            if ((custId == a.getAppCustId() && appId != a.getAppId())) {
-                if ((start.isAfter(appStart) || (start.isEqual(appStart))) && (start.isBefore(appEnd))) {
-                    return true;
-                } else if (end.isAfter(appStart) && ((end.isBefore(appEnd)) || end.isEqual(appEnd))) {
-                    return true;
-                } else if ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd))) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static ObservableList<Appointment> filterByWeek() throws SQLException{

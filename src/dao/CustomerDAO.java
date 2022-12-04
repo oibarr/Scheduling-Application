@@ -3,7 +3,6 @@ package dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jdbc.JDBC;
-import model.Appointment;
 import model.Customer;
 
 import java.sql.PreparedStatement;
@@ -92,17 +91,6 @@ public class CustomerDAO {
             );
         }
         return null;
-    }
-
-    public static boolean checkAssociatedApps(int custId) throws Exception {
-        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
-
-        for(Appointment a : appointments){
-            if(custId == a.getAppCustId() && a.getAppId() != 0){
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void deleteAssociatedApps(int custId) throws SQLException {

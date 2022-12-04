@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -52,6 +51,19 @@ public class Login implements Initializable {
     private Label locationLabel;
     ResourceBundle rb = ResourceBundle.getBundle("resourceBundle/language");
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm MM-dd-yyyy");
+
+    //Create an alert function that is public static final
+    //Create a functional interface to set it
+    //implement a lambda to call the functional interface
+
+    /*Alert alert = (String alertType, String alertMessage) -> {
+        ALERT.setAlertType(javafx.scene.control.Alert.AlertType.valueOf(alertType.toUpperCase()));
+        ALERT.setTitle(rb.getString(alertType) + " " + rb.getString("Dialog"));
+        ALERT.setHeaderText(alertType);
+        ALERT.setContentText(alertMessage);
+        return ALERT.showAndWait();
+    };*/
+
 
     private static final File LOGIN_ACTIVITY = new File("login_activity.txt");
 
@@ -90,18 +102,17 @@ public class Login implements Initializable {
         ObservableList<Appointment> associatedAppointments = AppointmentDAO.getAppointmentsByUser(currentUser.getUserId());
         ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
 
-        for (Appointment a : associatedAppointments) {
-            if (a.getAppStart().isAfter(LocalDateTime.now()) && a.getAppStart().isBefore(LocalDateTime.now().plusMinutes(15))){
+        //Lambda #1
+        associatedAppointments.forEach(a -> {
+            if (a.getAppStart().isAfter(LocalDateTime.now()) && a.getAppStart().isBefore(LocalDateTime.now().plusMinutes(15)) && upcomingAppointments.size() == 0){
                 upcomingAppointments.add(a);
                 setAlert("Information", "You have an upcoming appointment.\nAppointment ID: " + a.getAppId() + " at " + dateTimeFormatter.format(a.getAppStart()));
-                break;
             }
-        }
+        });
 
         if (upcomingAppointments.size() < 1){
             setAlert("Information", "You do not have any upcoming appointments.");
         }
-
     }
 
     private boolean validateLogin(String username, String password) throws SQLException {
@@ -182,16 +193,14 @@ public class Login implements Initializable {
         usernameTextField.setText("test");
         passwordTextField.setText("test");
 
-        if(Locale.getDefault().getLanguage().equals("fr")){
-            resourceBundle = ResourceBundle.getBundle("resourceBundle/language");
-            loginLabel.setText(resourceBundle.getString("Login"));
-            usernameLabel.setText(resourceBundle.getString("Username"));
-            passwordLabel.setText(resourceBundle.getString("Password"));
-            submitButton.setText(resourceBundle.getString("Submit"));
-            exitButton.setText(resourceBundle.getString("Exit"));
-            locationLabel.setText(resourceBundle.getString("Location") + ZoneId.systemDefault());
+        resourceBundle = ResourceBundle.getBundle("resourceBundle/language");
 
-        }
+        loginLabel.setText(resourceBundle.getString("Login"));
+        usernameLabel.setText(resourceBundle.getString("Username"));
+        passwordLabel.setText(resourceBundle.getString("Password"));
+        submitButton.setText(resourceBundle.getString("Submit"));
+        exitButton.setText(resourceBundle.getString("Exit"));
+        locationLabel.setText(resourceBundle.getString("Location") + ZoneId.systemDefault());
 
         //creates "login_activity.txt" file if it does not yet exist or clears it if it does
         createTextFile();

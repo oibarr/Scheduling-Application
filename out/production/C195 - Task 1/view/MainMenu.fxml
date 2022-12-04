@@ -88,16 +88,26 @@
                         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByType" prefHeight="25.0" prefWidth="100.0" text="Type" />
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByMonth" prefWidth="100.0" text="Month" GridPane.rowIndex="1" />
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByContact" prefWidth="100.0" text="Contact" GridPane.rowIndex="2" />
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByLocation" prefWidth="100.0" text="Location" GridPane.rowIndex="3" />
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionExit" prefWidth="100.0" text="Exit" GridPane.rowIndex="4" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByType"
+                                prefHeight="25.0" prefWidth="100.0" text="Type"/>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByMonth"
+                                prefWidth="100.0" text="Month" GridPane.rowIndex="1"/>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByContact"
+                                prefWidth="100.0" text="Contact" GridPane.rowIndex="2"/>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionReportByLocation"
+                                prefWidth="100.0" text="Location" GridPane.rowIndex="3"/>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionExit" prefWidth="100.0"
+                                text="Exit" GridPane.rowIndex="4"/>
                     </children>
                 </GridPane>
+                <Label layoutX="81.0" layoutY="164.0" text="Reports">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                </Label>
             </children>
         </AnchorPane>
     </children>
