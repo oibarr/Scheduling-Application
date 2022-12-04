@@ -11,15 +11,12 @@ import java.util.ResourceBundle;
 
 public class Main extends Application {
 
-//    --module-path ${PATH_TO_FX} --add-modules javafx.fxml,javafx.controls,javafx.graphics
-
     @Override
     public void start(Stage stage) throws Exception {
 
         //Translates login window to French when Locale is set to "fr"
-        //Locale.setDefault(new Locale("fr"));
+//        Locale.setDefault(new Locale("fr"));
         ResourceBundle resourceBundle = ResourceBundle.getBundle("resourceBundle/language");
-
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         stage.setTitle(resourceBundle.getString("Title"));

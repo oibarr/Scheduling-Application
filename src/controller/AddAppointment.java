@@ -4,6 +4,7 @@ import dao.AppointmentDAO;
 import dao.ContactDAO;
 import dao.CustomerDAO;
 import dao.UserDAO;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,6 +57,32 @@ public class AddAppointment implements Initializable {
     protected ZoneId localZoneId = ZoneId.systemDefault();
     protected ZoneId _EST = ZoneId.of("America/New_York");
 
+    public boolean appOverlapCheck(int custId, int appId, LocalDate appStartDate, LocalTime appStartTime, LocalDate appEndDate, LocalTime appEndTime) throws Exception {
+
+        if (appStartDate.isBefore(LocalDate.now())) return false;
+
+        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+
+        LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
+        LocalDateTime appEnd = LocalDateTime.of(appEndDate, appEndTime);
+
+        for (Appointment a : appointments) {
+            LocalDateTime start = a.getAppStart();
+            LocalDateTime end = a.getAppEnd();
+            if ((custId == a.getAppCustId() && appId != 0)){
+                if ((start.isAfter(appStart) || (start.isEqual(appStart))) && (start.isBefore(appEnd))){
+                    return true;
+                } else if (end.isAfter(appStart) && ((end.isBefore(appEnd)) || end.isEqual(appEnd))){
+                    return true;
+                } else if ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd))){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
     //Input validation
     boolean validateInputs() throws Exception {
         String appTitle = title.getText();
@@ -93,25 +120,19 @@ public class AddAppointment implements Initializable {
         }else if(appEndDate == null) {
             setAlert("Error", "Appointment must have a valid end date");
 
-        }else if(appEndTime == null) {
+        }else if (appEndTime == null){
             setAlert("Error", "Appointment must have a valid end time");
 
-        }/*else if(appStartDate.isBefore(currentDay)){
-                setAlert("Error", "Appointment start date cannot happen before today's date");
-
-        }else if(appStartTime.isBefore(currentTime)) {
-                setAlert("Error", "Appointment start time cannot occur before current time");
-
-        }*/else if(appStartTime.isAfter(appEndTime)) {
+        } else if (appStartTime.isAfter(appEndTime)){
             setAlert("Error", "Appointment start time cannot be after appointment end time");
 
-        }else if(appEndTime.isBefore(appStartTime)) {
+        } else if (appEndTime.isBefore(appStartTime)){
             setAlert("Error", "Appointment end time cannot be before appointment start time");
 
-        }else if(appStartTime.equals(appEndTime)) {
+        } else if (appStartTime.equals(appEndTime)){
             setAlert("Error", "Appointment cannot start and end at the same time");
 
-        }else if (AppointmentDAO.appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)){
+        } else if (appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)){
             setAlert("Error", "Appointment overlaps with existing customer appointments");
 
         } else {

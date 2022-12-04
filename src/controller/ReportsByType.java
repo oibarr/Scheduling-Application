@@ -40,6 +40,7 @@ public class ReportsByType implements Initializable {
     protected ObservableList<Appointment> appointmentsByFilter = FXCollections.observableArrayList();
 
     public void filterSelection(Appointment appointment) {
+
         int totalCount = 0;
         for (Appointment a : allAppointments) {
             if (a.getAppType().equals(appointment.getAppType())){
