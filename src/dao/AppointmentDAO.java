@@ -243,4 +243,28 @@ public class AppointmentDAO {
         }
         return appointmentsByContact;
     }
+
+    public static ObservableList<Appointment> getAppointmentsByCustomer(int custId) throws Exception {
+        ObservableList<Appointment> appointmentsByContact = FXCollections.observableArrayList();
+        String sqlStatement = "SELECT * FROM appointments AS a INNER JOIN customers AS c ON a.Customer_ID = c.Customer_ID WHERE a.Customer_ID = " + custId;
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
+        ResultSet result = preparedStatement.executeQuery();
+        while (result.next()) {
+            appointmentsByContact.add(
+                    new Appointment(
+                            result.getInt("Appointment_ID"),
+                            result.getString("Title"),
+                            result.getString("Description"),
+                            result.getString("Location"),
+                            result.getString("Type"),
+                            result.getTimestamp("Start").toLocalDateTime(),
+                            result.getTimestamp("End").toLocalDateTime(),
+                            result.getInt("Customer_ID"),
+                            result.getInt("User_ID"),
+                            result.getInt("Contact_ID")
+                    )
+            );
+        }
+        return appointmentsByContact;
+    }
 }

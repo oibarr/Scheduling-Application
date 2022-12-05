@@ -17,11 +17,8 @@ public class ReportsByMonth extends ReportsByType implements Initializable {
         countLabel.setText("Total Count: " + totalCount);
     }
 
-
     @Override
-    public void initializeReportScreen() {
-        appLabel.setText(appLabel.getText() + " by Month");
-        appCombo.setPromptText("Month");
+    public void initializeFilter() {
 
         try {
             appointmentFilter.addAll(AppointmentDAO.getMonthsFromAppointments());

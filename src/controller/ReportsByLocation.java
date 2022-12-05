@@ -18,9 +18,7 @@ public class ReportsByLocation extends ReportsByMonth implements Initializable {
     }
 
     @Override
-    public void initializeReportScreen() {
-        appLabel.setText(appLabel.getText() + " by Location");
-        appCombo.setPromptText("Location");
+    public void initializeFilter() {
 
         try {
             appointmentFilter.addAll(AppointmentDAO.getAppointmentLocations());

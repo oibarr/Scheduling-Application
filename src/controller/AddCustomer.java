@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static controller.Alert.setAlert;
+import static controller.Login.setAlert;
 
 public class AddCustomer implements Initializable {
     @FXML

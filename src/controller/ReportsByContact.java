@@ -18,9 +18,7 @@ public class ReportsByContact extends ReportsByMonth implements Initializable {
     }
 
     @Override
-    public void initializeReportScreen() {
-        appLabel.setText(appLabel.getText() + " by Contact");
-        appCombo.setPromptText("Contact");
+    public void initializeFilter() {
 
         try {
             appointmentFilter.addAll(AppointmentDAO.getAppointmentContacts());

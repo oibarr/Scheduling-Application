@@ -27,9 +27,9 @@ import java.util.Calendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static controller.Alert.setAlert;
+import static controller.Login.setAlert;
 
-public class MainMenu implements Initializable, Alert {
+public class MainMenu implements Initializable {
     private final ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
     private final ObservableList<Customer> Customers = FXCollections.observableArrayList();
 

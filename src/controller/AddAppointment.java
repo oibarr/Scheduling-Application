@@ -24,7 +24,7 @@ import java.time.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static controller.Alert.setAlert;
+import static controller.Login.setAlert;
 
 public class AddAppointment implements Initializable {
 
@@ -61,30 +61,37 @@ public class AddAppointment implements Initializable {
 
         if (appStartDate.isBefore(LocalDate.now())) return false;
 
-        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        ObservableList<Appointment> associatedAppointments = AppointmentDAO.getAppointmentsByCustomer(custId);
 
         LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
         LocalDateTime appEnd = LocalDateTime.of(appEndDate, appEndTime);
 
-        for (Appointment a : appointments) {
+        for (Appointment a : associatedAppointments) {
             LocalDateTime start = a.getAppStart();
             LocalDateTime end = a.getAppEnd();
-            if ((custId == a.getAppCustId() && appId != 0)){
-                if ((start.isAfter(appStart) || (start.isEqual(appStart))) && (start.isBefore(appEnd))){
-                    return true;
-                } else if (end.isAfter(appStart) && ((end.isBefore(appEnd)) || end.isEqual(appEnd))){
-                    return true;
-                } else if ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd))){
-                    return true;
-                }
-            }
-        }
-        return false;
 
+            if (a.getAppId() != appId){
+                return ((start.isAfter(appStart) || start.isEqual(appStart)) && start.isBefore(appEnd))
+                        ||
+                        (end.isAfter(appStart) && (end.isBefore(appEnd) || end.isEqual(appEnd)))
+                        ||
+                        ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd)));
+            }
+
+        }
+
+        return false;
     }
 
     //Input validation
     boolean validateInputs() throws Exception {
+        int appId;
+        if (id.getText().isEmpty() || id.getText().isBlank()){
+            appId = 0;
+        } else {
+            appId = Integer.parseInt(id.getText());
+        }
+
         String appTitle = title.getText();
         String appDesc = desc.getText();
         String appLoc = location.getText();
@@ -132,7 +139,7 @@ public class AddAppointment implements Initializable {
         } else if (appStartTime.equals(appEndTime)){
             setAlert("Error", "Appointment cannot start and end at the same time");
 
-        } else if (appOverlapCheck(appCustId, 0, appStartDate, appStartTime, appEndDate, appEndTime)){
+        } else if (appOverlapCheck(appCustId, appId, appStartDate, appStartTime, appEndDate, appEndTime)){
             setAlert("Error", "Appointment overlaps with existing customer appointments");
 
         } else {

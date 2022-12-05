@@ -12,9 +12,9 @@
     <children>
         <AnchorPane prefHeight="375.0" prefWidth="750.0">
             <children>
-                <Label fx:id="appLabel" layoutX="14.0" layoutY="30.0" text="Appointments">
+                <Label fx:id="appLabel" layoutX="14.0" layoutY="30.0" text="Appointments by Month: ">
                     <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="System Bold" size="24.0"/>
                     </font>
                 </Label>
                 <TableView fx:id="appTable" layoutX="25.0" layoutY="92.0" prefHeight="250.0" prefWidth="750.0">
@@ -31,7 +31,8 @@
                         <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID"/>
                     </columns>
                 </TableView>
-                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" onAction="#onActionCombo" prefWidth="150.0"/>
+                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" promptText="Month" onAction="#onActionCombo"
+                          prefWidth="150.0"/>
             </children>
         </AnchorPane>
         <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0"
