@@ -57,10 +57,7 @@ public class ReportsByType implements Initializable {
         appTable.setItems(appointmentsByFilter);
     }
 
-    public void initializeReportScreen() {
-        appLabel.setText(appLabel.getText() + " by Type");
-        appCombo.setPromptText("Type");
-
+    public void initializeFilter() {
         try {
             appointmentFilter.addAll(AppointmentDAO.getAllAppointmentTypes());
         } catch (Exception e) {
@@ -98,8 +95,8 @@ public class ReportsByType implements Initializable {
             e.printStackTrace();
         }
         appTable.setItems(allAppointments);
-        countLabel.setText("Total Count: " + allAppointments.size());
+        countLabel.setText(countLabel.getText() + allAppointments.size());
 
-        initializeReportScreen();
+        initializeFilter();
     }
 }
