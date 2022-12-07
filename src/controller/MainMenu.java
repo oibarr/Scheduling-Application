@@ -173,16 +173,11 @@ public class MainMenu implements Initializable {
 
     //Checks for associated appointments
     public static boolean checkAssociatedApps(int custId) throws Exception {
+
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
-        ObservableList<Appointment> associatedAppointments = FXCollections.observableArrayList();
 
         //Lambda #2
-        appointments.forEach(a -> {
-            if (custId == a.getAppCustId()){
-                associatedAppointments.add(a);
-            }
-        });
-
+        ObservableList<Appointment> associatedAppointments = appointments.filtered(a -> a.getAppCustId() == custId);
         return associatedAppointments.size() != 0;
 
     }

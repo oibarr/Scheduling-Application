@@ -29,7 +29,8 @@
                         <TableColumn fx:id="Contact_ID" prefWidth="75.0" text="Contact ID"/>
                     </columns>
                 </TableView>
-                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" promptText="Type" onAction="#onActionCombo" prefWidth="150.0"/>
+                <ComboBox fx:id="appCombo" layoutX="598.0" layoutY="35.0" promptText="Type" onAction="#onActionCombo"
+                          prefWidth="150.0"/>
             </children>
         </AnchorPane>
         <Button layoutX="721.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionExit" prefHeight="25.0"

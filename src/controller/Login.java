@@ -30,8 +30,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static controller.Alert.setAlert;
-
 public class Login implements Initializable {
     @FXML
     private Label loginLabel;
@@ -49,23 +47,17 @@ public class Login implements Initializable {
     private Button exitButton;
     @FXML
     private Label locationLabel;
-    ResourceBundle rb = ResourceBundle.getBundle("resourceBundle/language");
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm MM-dd-yyyy");
+    private static final File LOGIN_ACTIVITY = new File("login_activity.txt");
+    public static final ResourceBundle RB = ResourceBundle.getBundle("resourceBundle/language");
+    public static final javafx.scene.control.Alert ALERT = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.NONE);
 
-    //Create an alert function that is public static final
-    //Create a functional interface to set it
-    //implement a lambda to call the functional interface
-
-    /*Alert alert = (String alertType, String alertMessage) -> {
+    public static Optional<ButtonType> setAlert(String alertType, String alertMessage) {
         ALERT.setAlertType(javafx.scene.control.Alert.AlertType.valueOf(alertType.toUpperCase()));
-        ALERT.setTitle(rb.getString(alertType) + " " + rb.getString("Dialog"));
+        ALERT.setTitle(RB.getString(alertType) + " " + RB.getString("Dialog"));
         ALERT.setHeaderText(alertType);
         ALERT.setContentText(alertMessage);
         return ALERT.showAndWait();
-    };*/
-
-
-    private static final File LOGIN_ACTIVITY = new File("login_activity.txt");
+    }
 
     private static boolean validUsername(String username) throws SQLException {
         return UserDAO.validateUsername(username);
@@ -75,18 +67,18 @@ public class Login implements Initializable {
         return UserDAO.validateLoginCredentials(username, password);
     }
 
-    private boolean loginActivity(boolean loginSuccess){
+    private boolean loginActivity(boolean loginSuccess) {
         String username = usernameTextField.getText();
         String loginOutcome;
 
         if(loginSuccess){
-            loginOutcome = rb.getString("Success");
+            loginOutcome = RB.getString("Success");
         }else{
-            loginOutcome = rb.getString("Failed");
+            loginOutcome = RB.getString("Failed");
         }
 
         try (FileWriter fileWriter = new FileWriter("login_activity.txt", true)) {
-            String record = rb.getString("User") + username + " [" + loginOutcome + "] " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
+            String record = RB.getString("User") + username + " [" + loginOutcome + "] " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
             System.out.println(record);
             fileWriter.write(record + "\n");
         } catch (IOException e) {
@@ -104,15 +96,16 @@ public class Login implements Initializable {
 
         //Lambda #1
         associatedAppointments.forEach(a -> {
-            if (a.getAppStart().isAfter(LocalDateTime.now()) && a.getAppStart().isBefore(LocalDateTime.now().plusMinutes(15)) && upcomingAppointments.size() == 0){
+            if (a.getAppStart().isAfter(LocalDateTime.now()) && a.getAppStart().isBefore(LocalDateTime.now().plusMinutes(15)) && upcomingAppointments.isEmpty()){
                 upcomingAppointments.add(a);
-                setAlert("Information", "You have an upcoming appointment.\nAppointment ID: " + a.getAppId() + " at " + dateTimeFormatter.format(a.getAppStart()));
+                setAlert("Information", "You have an upcoming appointment.\nAppointment ID: " + a.getAppId() + " at " + DateTimeFormatter.ofPattern("HH:mm a 'on' E MM-dd-yyyy").format(a.getAppStart()));
             }
         });
 
-        if (upcomingAppointments.size() < 1){
+        if (upcomingAppointments.isEmpty()){
             setAlert("Information", "You do not have any upcoming appointments.");
         }
+
     }
 
     private boolean validateLogin(String username, String password) throws SQLException {
@@ -124,17 +117,17 @@ public class Login implements Initializable {
         String password = passwordTextField.getText();
 
         if (username.isEmpty() || username.isBlank()){
-            setAlert("Error", rb.getString("BlankUsername"));
+            setAlert("Error", RB.getString("BlankUsername"));
         } else if (password.isEmpty() || password.isBlank()){
-            setAlert("Error", rb.getString("BlankPassword"));
+            setAlert("Error", RB.getString("BlankPassword"));
         } else if (!validUsername(username)){
-            setAlert("Error", rb.getString("IncorrectUsername"));
+            setAlert("Error", RB.getString("IncorrectUsername"));
         } else if(validUsername(username)){
             if(loginActivity(validateLogin(username, password))){
-                System.out.println(rb.getString("User") + username + " " + rb.getString("LoggedIn"));
+                System.out.println(RB.getString("User") + username + " " + RB.getString("LoggedIn"));
                 return true;
             }else {
-                setAlert("Error", rb.getString("IncorrectPassword"));
+                setAlert("Error", RB.getString("IncorrectPassword"));
             }
         }
         return false;
@@ -155,7 +148,7 @@ public class Login implements Initializable {
     }
 
     public void onActionExit(ActionEvent actionEvent) {
-        Optional<ButtonType> result = setAlert("Confirmation", rb.getString("ExitConfirmation"));
+        Optional<ButtonType> result = setAlert("Confirmation", RB.getString("ExitConfirmation"));
 
         if(result.isPresent() && result.get() == ButtonType.OK){
             JDBC.closeConnection();
@@ -163,26 +156,18 @@ public class Login implements Initializable {
         }
     }
 
-
-    private void clearTextFile() throws IOException {
-        try(FileWriter fileWriter = new FileWriter(LOGIN_ACTIVITY)){
-            System.out.println(LOGIN_ACTIVITY.getName() + " has been reset to default");
-        }
-    }
-
     private void createTextFile(){
         try {
             if(LOGIN_ACTIVITY.createNewFile()){
                 System.out.println(LOGIN_ACTIVITY.getName() + " has been created");
-            } else {
-                clearTextFile();
-            }
+            }/* else {
+                FileWriter fileWriter = new FileWriter(LOGIN_ACTIVITY.getName());
+                System.out.println(LOGIN_ACTIVITY.getName() + " has been reset to default");
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -202,8 +187,9 @@ public class Login implements Initializable {
         exitButton.setText(resourceBundle.getString("Exit"));
         locationLabel.setText(resourceBundle.getString("Location") + ZoneId.systemDefault());
 
-        //creates "login_activity.txt" file if it does not yet exist or clears it if it does
+        //creates "login_activity.txt" file if it does not yet exist
         createTextFile();
 
     }
+
 }
