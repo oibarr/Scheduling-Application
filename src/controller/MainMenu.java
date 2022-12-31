@@ -29,6 +29,9 @@ import java.util.ResourceBundle;
 
 import static controller.Login.setAlert;
 
+/**
+ * This class creates the Main Menu controller.
+ */
 public class MainMenu implements Initializable {
     private final ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
     private final ObservableList<Customer> Customers = FXCollections.observableArrayList();
@@ -71,22 +74,42 @@ public class MainMenu implements Initializable {
     @FXML
     private TableColumn<Customer, Integer> Division_ID;
 
+    /**
+     * This method clears and updates the appointments table with all appointments when the "All" radio button is selected.
+     *
+     * @param actionEvent the user selects the "All" radio button
+     */
     //Radio Buttons
     public void onActionAll(ActionEvent actionEvent) throws Exception {
         Appointments.clear();
         Appointments.addAll(AppointmentDAO.getAllAppointments());
     }
 
+    /**
+     * This method clears and updates the appointments table with appointments scheduled for the current week when the "Week" radio button is selected.
+     *
+     * @param actionEvent the user selects the "Week" radio button
+     */
     public void onActionWeek(ActionEvent actionEvent) throws SQLException {
         Appointments.clear();
         Appointments.addAll(AppointmentDAO.filterByWeek());
     }
 
+    /**
+     * This method clears and updates the appointments table with appointments scheduled for the current month when the "Month" radio button is selected.
+     *
+     * @param actionEvent the "Month" radio button is selected
+     */
     public void onActionMonth(ActionEvent actionEvent) throws Exception {
         Appointments.clear();
         Appointments.addAll(AppointmentDAO.filterByMonth());
     }
 
+    /**
+     * This method navigates to the Modify Appointment screen and obtains a selection from the Appointments table.
+     *
+     * @param actionEvent the user clocks on the Modify button
+     */
     //Navigates to ModifyAppointment screen; obtains selection from Appointments table
     public void onActionModifyApp(ActionEvent actionEvent) throws IOException, SQLException {
         if (appTable.getSelectionModel().getSelectedItem() != null){
@@ -109,14 +132,19 @@ public class MainMenu implements Initializable {
         }
     }
 
+    /**
+     * This method deletes an appointment.
+     *
+     * @param actionEvent the user clicks on the Delete button
+     */
     //Deletes appointment
     public void onActionDeleteApp(ActionEvent actionEvent) {
-        if(appTable.getSelectionModel().getSelectedItem() != null) {
+        if (appTable.getSelectionModel().getSelectedItem() != null){
 
 
             Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to delete selected appointment(s)?");
 
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (result.isPresent() && result.get() == ButtonType.OK){
                 int appId = appTable.getSelectionModel().getSelectedItem().getAppId();
                 String appType = appTable.getSelectionModel().getSelectedItem().getAppType();
 
@@ -139,6 +167,11 @@ public class MainMenu implements Initializable {
         }
     }
 
+    /**
+     * This method navigates to the Add Customer screen.
+     *
+     * @param actionEvent the user clicks on the Add button
+     */
     //Navigates to AddCustomer screen
     public void onActionAddCust(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddCustomer.fxml"));
@@ -149,6 +182,11 @@ public class MainMenu implements Initializable {
         stage.show();
     }
 
+    /**
+     * This method navigates to the Modify Customer screen and obtains a selected customer.
+     *
+     * @param actionEvent the user clicks on the Modify button
+     */
     //Navigates to ModifyCustomer screen; obtains selected customer
     public void onActionModifyCust(ActionEvent actionEvent) throws IOException, SQLException {
         if (custTable.getSelectionModel().getSelectedItem() != null){
@@ -159,7 +197,7 @@ public class MainMenu implements Initializable {
             ModifyCustomer modifyCustomerControllerReference = loader.getController();
             modifyCustomerControllerReference.sendCust(custTable.getSelectionModel().getSelectedItem());
 
-            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Modify Customer");
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
@@ -171,6 +209,13 @@ public class MainMenu implements Initializable {
 
     }
 
+    /**
+     * This method checks for associated appointments using a customer ID.
+     * Lambda #2: filters appointments that match the customer ID. The use of a lambda simplifies the code and aids readability.
+     *
+     * @param custId the customer ID
+     * @return returns true if there is an associated appointment with the customer ID
+     */
     //Checks for associated appointments
     public static boolean checkAssociatedApps(int custId) throws Exception {
 
@@ -182,6 +227,12 @@ public class MainMenu implements Initializable {
 
     }
 
+    /**
+     * This method deletes a Customer.
+     * It checks for customer appointment dependencies before deleting a Customer and allows the user to delete associated appointments as well as confirm customer deletion
+     *
+     * @param actionEvent the user clicks on the Delete button
+     */
     //Checks for customer appointment dependencies before deleting a Customer; allows the user to delete associated appointments and confirm deletion of the customer
     public void onActionDeleteCust(ActionEvent actionEvent) throws Exception {
         if (custTable.getSelectionModel().getSelectedItem() != null){
@@ -226,54 +277,87 @@ public class MainMenu implements Initializable {
                     custTable.setItems(Customers);
                 }
             }
-        }else{
+        } else {
             setAlert("Error", "No customer(s) selected");
         }
     }
 
+    /**
+     * This method navigates to the Type report screen.
+     *
+     * @param actionEvent the user clicks on the Type button
+     */
     //Reports Dashboard
     public void onActionReportByType(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/TypeScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments by Type");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
+
+    /**
+     * This method navigates to the Month report screen.
+     *
+     * @param actionEvent the user clicks on the Month button
+     */
     public void onActionReportByMonth(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MonthScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments by Month");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
+
+    /**
+     * This method navigates to the Contact report screen.
+     *
+     * @param actionEvent the user clicks on the Contact button
+     */
     public void onActionReportByContact(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/ContactScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments by Contact");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
+
+    /**
+     * This method navigates to the Location report screen.
+     *
+     * @param actionEvent the user clicks on the Location button
+     */
     public void onActionReportByLocation(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/LocationScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments by Location");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
 
+    /**
+     * This method navigates to the Add Appointment screen.
+     *
+     * @param actionEvent the user clicks on the Add button
+     */
     public void onActionAddApp(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointment.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Add Appointment");
         stage.setScene(new Scene(root));
         stage.centerOnScreen();
         stage.show();
     }
 
+    /**
+     * This method exits the application.
+     *
+     * @param actionEvent the user clicks on the Exit button
+     */
     @FXML
     void onActionExit(ActionEvent actionEvent) {
 
@@ -285,6 +369,7 @@ public class MainMenu implements Initializable {
         }
     }
 
+    /** This method initializes the Main Menu. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

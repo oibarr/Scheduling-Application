@@ -30,6 +30,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * This class creates the login controller.
+ */
 public class Login implements Initializable {
     @FXML
     private Label loginLabel;
@@ -51,6 +54,13 @@ public class Login implements Initializable {
     public static final ResourceBundle RB = ResourceBundle.getBundle("resourceBundle/language");
     public static final javafx.scene.control.Alert ALERT = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.NONE);
 
+    /**
+     * This method sets an alert.
+     *
+     * @param alertType    the alert type
+     * @param alertMessage the alert message
+     * @return returns and shows the alert
+     */
     public static Optional<ButtonType> setAlert(String alertType, String alertMessage) {
         ALERT.setAlertType(javafx.scene.control.Alert.AlertType.valueOf(alertType.toUpperCase()));
         ALERT.setTitle(RB.getString(alertType) + " " + RB.getString("Dialog"));
@@ -59,21 +69,40 @@ public class Login implements Initializable {
         return ALERT.showAndWait();
     }
 
+    /**
+     * This method determines whether a username is valid.
+     *
+     * @param username the username
+     * @return returns true if the username is valid in the database
+     */
     private static boolean validUsername(String username) throws SQLException {
         return UserDAO.validateUsername(username);
     }
 
+    /**
+     * This method determines whether a login attempt is valid.
+     *
+     * @param username the username
+     * @param password the password
+     * @return returns true if the login attempt is valid
+     */
     private static boolean validLogin(String username, String password) throws SQLException {
         return UserDAO.validateLoginCredentials(username, password);
     }
 
+    /**
+     * This method logs the login activity and registers whether an attempt passed or failed.
+     *
+     * @param loginSuccess the login outcome
+     * @return returns whether a login attempt passed or failed
+     */
     private boolean loginActivity(boolean loginSuccess) {
         String username = usernameTextField.getText();
         String loginOutcome;
 
-        if(loginSuccess){
+        if (loginSuccess){
             loginOutcome = RB.getString("Success");
-        }else{
+        } else {
             loginOutcome = RB.getString("Failed");
         }
 
@@ -87,6 +116,10 @@ public class Login implements Initializable {
         return loginSuccess;
     }
 
+    /**
+     * This method checks for an upcoming appointment when a user logs in.
+     * Lambda #1: checks associated appointments for an upcoming appointment within 15 minutes of a user's login. The use of a lambda simplifies the code and aids readability.
+     */
     private void appointmentCheck() throws Exception {
         User currentUser = UserDAO.getUser(usernameTextField.getText());
         assert currentUser != null;
@@ -108,10 +141,22 @@ public class Login implements Initializable {
 
     }
 
+    /**
+     * This method validates a login attempt.
+     *
+     * @param username the username
+     * @param password the password
+     * @return returns true if the login attempt is successful
+     */
     private boolean validateLogin(String username, String password) throws SQLException {
         return validLogin(username, password);
     }
 
+    /**
+     * This method validates user inputs.
+     *
+     * @return returns true if user inputs are valid
+     */
     private boolean validateInputs() throws SQLException {
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
@@ -122,17 +167,22 @@ public class Login implements Initializable {
             setAlert("Error", RB.getString("BlankPassword"));
         } else if (!validUsername(username)){
             setAlert("Error", RB.getString("IncorrectUsername"));
-        } else if(validUsername(username)){
-            if(loginActivity(validateLogin(username, password))){
+        } else if (validUsername(username)){
+            if (loginActivity(validateLogin(username, password))){
                 System.out.println(RB.getString("User") + username + " " + RB.getString("LoggedIn"));
                 return true;
-            }else {
+            } else {
                 setAlert("Error", RB.getString("IncorrectPassword"));
             }
         }
         return false;
     }
 
+    /**
+     * This method executes a login attempt.
+     *
+     * @param actionEvent the action event
+     */
     public void onActionLogin(ActionEvent actionEvent) throws Exception {
 
         if (validateInputs()){
@@ -147,18 +197,26 @@ public class Login implements Initializable {
 
     }
 
+    /**
+     * This method exits the application.
+     *
+     * @param actionEvent the action event
+     */
     public void onActionExit(ActionEvent actionEvent) {
         Optional<ButtonType> result = setAlert("Confirmation", RB.getString("ExitConfirmation"));
 
-        if(result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             JDBC.closeConnection();
             System.exit(0);
         }
     }
 
-    private void createTextFile(){
+    /**
+     * This method creates a text file that logs user login activity.
+     */
+    private void createTextFile() {
         try {
-            if(LOGIN_ACTIVITY.createNewFile()){
+            if (LOGIN_ACTIVITY.createNewFile()){
                 System.out.println(LOGIN_ACTIVITY.getName() + " has been created");
             }/* else {
                 FileWriter fileWriter = new FileWriter(LOGIN_ACTIVITY.getName());
@@ -169,6 +227,10 @@ public class Login implements Initializable {
         }
     }
 
+    /**
+     * This method initializes the login screen.
+     * It auto-populates the test user and creates the login_activity.txt file if it does not yet exist.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

@@ -11,8 +11,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * This class contains the Appointment database methods which handle SQL operations on Appointments.
+ */
 public class AppointmentDAO {
-
+    /** This method gets all Appointments from the database.
+     * @return returns an observable list of all the appointments in the database */
     public static ObservableList<Appointment> getAllAppointments() throws Exception {
 
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
@@ -39,6 +43,19 @@ public class AppointmentDAO {
         return allAppointments;
     }
 
+    /**
+     * This method adds an Appointment to the database.
+     *
+     * @param appTitle  appointment title
+     * @param appDesc   appointment description
+     * @param appLoc    appointment location
+     * @param appType   appointment type
+     * @param appStart  appointment start date and time
+     * @param appEnd    appointment end date and time
+     * @param appCustID the associated Customer ID
+     * @param appUserId the associated User ID
+     * @param appContId the associated Contact ID
+     */
     public static void addAppointment(String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustID, int appUserId, int appContId) {
         try {
             String sqlStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -61,6 +78,20 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * This method modifies an Appointment in the database.
+     *
+     * @param appId     appointment ID
+     * @param appTitle  appointment title
+     * @param appDesc   appointment description
+     * @param appLoc    appointment location
+     * @param appType   appointment type
+     * @param appStart  appointment start date and time
+     * @param appEnd    appointment end date and time
+     * @param appCustID the associated Customer ID
+     * @param appUserId the associated User ID
+     * @param appContId the associated Contact ID
+     */
     public static void modAppointment(int appId, String appTitle, String appDesc, String appLoc, String appType, LocalDateTime appStart, LocalDateTime appEnd, int appCustID, int appUserId, int appContId) {
         try {
             String sqlStatement = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
@@ -84,7 +115,11 @@ public class AppointmentDAO {
         }
     }
 
-
+    /**
+     * This method deletes an Appointment using an appointment ID.
+     *
+     * @param appId the appointment ID
+     */
     public static void deleteAppointment(int appId) {
         try {
             String sqlStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";
@@ -99,7 +134,12 @@ public class AppointmentDAO {
         }
     }
 
-    public static ObservableList<Appointment> filterByWeek() throws SQLException{
+    /**
+     * This method filters appointments by current week.
+     *
+     * @return returns an observable list of appointments for the current week
+     */
+    public static ObservableList<Appointment> filterByWeek() throws SQLException {
         ObservableList<Appointment> curWeekApps = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM appointments WHERE WEEK(Start) = WEEK(CURDATE())";
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
@@ -124,7 +164,12 @@ public class AppointmentDAO {
         return curWeekApps;
     }
 
-    public static ObservableList<Appointment> filterByMonth() throws SQLException{
+    /**
+     * This method filters appointment by the current month.
+     *
+     * @return returns an observable list of appointments for the current month
+     */
+    public static ObservableList<Appointment> filterByMonth() throws SQLException {
         ObservableList<Appointment> curMonthApps = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM appointments WHERE MONTH(Start) = MONTH(CURDATE())";
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
@@ -149,6 +194,11 @@ public class AppointmentDAO {
         return curMonthApps;
     }
 
+    /**
+     * This method gets the distinct appointment types from all the appointments in the database.
+     *
+     * @return returns an observable list of the distinct appointment types in the database
+     */
     public static ObservableList<Appointment> getAllAppointmentTypes() throws Exception {
 
         ObservableList<Appointment> allAppointmentTypes = FXCollections.observableArrayList();
@@ -156,7 +206,7 @@ public class AppointmentDAO {
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
 
-        while(result.next()){
+        while (result.next()) {
             allAppointmentTypes.add(
                     new Appointment(
                             result.getString("Type")
@@ -166,6 +216,11 @@ public class AppointmentDAO {
         return allAppointmentTypes;
     }
 
+    /**
+     * This method gets the appointment locations from the database.
+     *
+     * @return returns an observable list of the appointment locations in the database
+     */
     public static ObservableList<Appointment> getAppointmentLocations() throws Exception {
 
         ObservableList<Appointment> appointmentLocations = FXCollections.observableArrayList();
@@ -173,7 +228,7 @@ public class AppointmentDAO {
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
 
-        while(result.next()){
+        while (result.next()) {
             appointmentLocations.add(
                     new Appointment(
                             result.getString("Title"),
@@ -184,6 +239,11 @@ public class AppointmentDAO {
         return appointmentLocations;
     }
 
+    /**
+     * This method gets the appointment months from the database.
+     *
+     * @return returns an observable list of the months that have appointments in the database
+     */
     public static ObservableList<Appointment> getMonthsFromAppointments() throws Exception {
 
         ObservableList<Appointment> appointmentMonths = FXCollections.observableArrayList();
@@ -191,7 +251,7 @@ public class AppointmentDAO {
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
 
-        while(result.next()){
+        while (result.next()) {
             appointmentMonths.add(
                     new Appointment(
                             result.getString("Title"),
@@ -202,6 +262,11 @@ public class AppointmentDAO {
         return appointmentMonths;
     }
 
+    /**
+     * This method gets the appointment contacts from the database.
+     *
+     * @return returns an observable list of the contacts that have appointments in the database
+     */
     public static ObservableList<Appointment> getAppointmentContacts() throws Exception {
 
         ObservableList<Appointment> appointmentContacts = FXCollections.observableArrayList();
@@ -209,7 +274,7 @@ public class AppointmentDAO {
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);
         ResultSet result = preparedStatement.executeQuery();
 
-        while(result.next()){
+        while (result.next()) {
             appointmentContacts.add(
                     new Appointment(
                             result.getInt("Contact_ID"),
@@ -220,6 +285,12 @@ public class AppointmentDAO {
         return appointmentContacts;
     }
 
+    /**
+     * This method gets appointments by user in the database.
+     *
+     * @param userId the user ID
+     * @return returns an observable list of appointments associated with the user ID
+     */
     public static ObservableList<Appointment> getAppointmentsByUser(int userId) throws Exception {
         ObservableList<Appointment> appointmentsByContact = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM appointments AS a INNER JOIN users AS u ON a.User_ID = u.User_ID WHERE a.User_ID = " + userId;
@@ -244,6 +315,12 @@ public class AppointmentDAO {
         return appointmentsByContact;
     }
 
+    /**
+     * This method gets appointments by customer in the database.
+     *
+     * @param custId the customer ID
+     * @return returns an observable list of appointments associated with the customer ID
+     */
     public static ObservableList<Appointment> getAppointmentsByCustomer(int custId) throws Exception {
         ObservableList<Appointment> appointmentsByContact = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM appointments AS a INNER JOIN customers AS c ON a.Customer_ID = c.Customer_ID WHERE a.Customer_ID = " + custId;

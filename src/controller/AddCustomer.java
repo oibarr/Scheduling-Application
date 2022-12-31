@@ -26,6 +26,9 @@ import java.util.ResourceBundle;
 
 import static controller.Login.setAlert;
 
+/**
+ * This class creates the Add Customer screen controller.
+ */
 public class AddCustomer implements Initializable {
     @FXML
     protected ComboBox<Country> country;
@@ -42,12 +45,22 @@ public class AddCustomer implements Initializable {
     @FXML
     protected TextField postal;
 
+    /**
+     * This method populates the division ComboBox based on country selection.
+     *
+     * @param actionEvent the user selects a Country
+     */
     //Populates division selection based on country
     public void onActionCountry(ActionEvent actionEvent) throws SQLException {
         division.setItems(DivisionDAO.getCountryDiv(country.getValue().getCountryId()));
         division.getSelectionModel().selectFirst();
     }
 
+    /**
+     * This method validates user inputs.
+     *
+     * @return returns true if inputs are valid
+     */
     //Input validation
     public boolean validateInputs() {
         String custName = name.getText();
@@ -68,12 +81,16 @@ public class AddCustomer implements Initializable {
             int custDivId = custDiv.getDivId();
 
             saveCustomer(new Customer(custName, custAddress, custPostal, custPhone, custDivId));
-//            CustomerDAO.addCustomer(custName, custAddress, custPostal, custPhone, custDivId);
             return true;
         }
         return false;
     }
 
+    /**
+     * This method saves a new customer.
+     *
+     * @param customer the customer
+     */
     //Saves a new customer
     public void saveCustomer(Customer customer) {
         CustomerDAO.addCustomer(
@@ -84,6 +101,11 @@ public class AddCustomer implements Initializable {
                 customer.getCustDivId());
     }
 
+    /**
+     * This method executes the save customer action and navigate back to the Main Menu.
+     *
+     * @param actionEvent the user clicks on the Save button
+     */
     //Saves customer; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
         try {
@@ -95,18 +117,23 @@ public class AddCustomer implements Initializable {
                 stage.centerOnScreen();
                 stage.show();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This method cancels the customer creation and navigates back to the Main Menu.
+     *
+     * @param actionEvent the user clicks on the Cancel button
+     */
     //Cancels customer creation; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
-        if(result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Scheduling Application");
             stage.centerOnScreen();
@@ -114,7 +141,7 @@ public class AddCustomer implements Initializable {
         }
     }
 
-
+    /** This method initializes the Add Customer screen. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         id.setDisable(true);

@@ -6,11 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jdbc.JDBC;
-
 import java.util.ResourceBundle;
 
+/**
+ * This class creates the GUI-based scheduling application.
+ */
 public class Main extends Application {
 
+    /** This method sets the GUI. */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -26,7 +29,16 @@ public class Main extends Application {
 
     }
 
-    public static void main(String[] args){
+    /**
+     * This is the main method which launches the application.
+     * Scheduling Application Manager 2.0
+     * Lambda #1 can be found on line 115 of Login.java
+     * Lambda #2 can be found on line 199 of MainMenu.java
+     * Javadocs are located in /javadocs
+     *
+     * @author Osvaldo Ibarra
+     */
+    public static void main(String[] args) {
 
         //opens connection with database
         JDBC.openConnection();
