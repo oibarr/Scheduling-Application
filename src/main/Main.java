@@ -34,7 +34,7 @@ public class Main extends Application {
      * <p>Scheduling Application Manager 2.0</p>
      * <p>Lambda #1 can be found on line 115 of Login.java</p>
      * <p>Lambda #2 can be found on line 199 of MainMenu.java</p>
-     * Javadocs are located in /javadocs
+     * Javadocs are located in the javadoc folder
      *
      * @author Osvaldo Ibarra
      */
