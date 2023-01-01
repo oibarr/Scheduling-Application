@@ -31,9 +31,9 @@ public class Main extends Application {
 
     /**
      * This is the main method which launches the application.
-     * Scheduling Application Manager 2.0
-     * Lambda #1 can be found on line 115 of Login.java
-     * Lambda #2 can be found on line 199 of MainMenu.java
+     * <p>Scheduling Application Manager 2.0</p>
+     * <p>Lambda #1 can be found on line 115 of Login.java</p>
+     * <p>Lambda #2 can be found on line 199 of MainMenu.java</p>
      * Javadocs are located in /javadocs
      *
      * @author Osvaldo Ibarra

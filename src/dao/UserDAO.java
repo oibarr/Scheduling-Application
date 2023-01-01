@@ -65,9 +65,12 @@ public class UserDAO {
         return allUsers;
     }
 
-    /** This method retrieves a User with a matching ID.
+    /**
+     * This method retrieves a User with a matching ID.
+     *
      * @param userId the User ID
-     * @return returns a User with a matching ID */
+     * @return returns a User with a matching ID
+     */
     public static User getUser(int userId) throws SQLException {
         String sqlStatement = "SELECT * FROM users WHERE User_ID = " + userId;
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlStatement);

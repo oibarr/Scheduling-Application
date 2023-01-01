@@ -13,8 +13,11 @@ import java.sql.SQLException;
  * This class contains the Customer database methods which handle SQL operations on Customers.
  */
 public class CustomerDAO {
-    /** This method gets all Customers from the database.
-     * @return returns an observable list of all the customers in the database. */
+    /**
+     * This method gets all Customers from the database.
+     *
+     * @return returns an observable list of all the customers in the database.
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM customers";

@@ -14,17 +14,19 @@ public abstract class JDBC {
     private static final String databaseName = "client_schedule";
     private static final String jdbcUrl = protocol + vendor + location + databaseName + "?connectionTimeZone = SERVER";
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String userName = "root"; //"sqlUser";
-    private static final String password = "root"; //"Passw0rd!";
+    private static final String userName = "sqlUser"; //"root";
+    private static final String password = "Passw0rd!"; //"root";
     public static Connection connection;
 
-    /** This method opens the initial connection with the database. */
-    public static void openConnection(){
-        try{
+    /**
+     * This method opens the initial connection with the database.
+     */
+    public static void openConnection() {
+        try {
             Class.forName(driver);
             connection = DriverManager.getConnection(jdbcUrl, userName, password);
             System.out.println("Connection Successful!");
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } catch(ClassNotFoundException e){
             e.printStackTrace();
@@ -47,6 +49,5 @@ public abstract class JDBC {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
 
 }

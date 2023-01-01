@@ -32,7 +32,7 @@ public class User {
     /**
      * This method sets the user ID.
      *
-     * @[param userId the user ID
+     * @param userId the user ID
      */
     public void setUserId(int userId) {
         this.userId = userId;

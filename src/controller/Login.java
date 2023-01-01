@@ -69,33 +69,24 @@ public class Login implements Initializable {
         return ALERT.showAndWait();
     }
 
-    /**
-     * This method determines whether a username is valid.
-     *
+    /** This method determines whether a username is valid.
      * @param username the username
-     * @return returns true if the username is valid in the database
-     */
+     * @return returns true if the username is valid in the database */
     private static boolean validUsername(String username) throws SQLException {
         return UserDAO.validateUsername(username);
     }
 
-    /**
-     * This method determines whether a login attempt is valid.
-     *
+    /** This method determines whether a login attempt is valid.
      * @param username the username
      * @param password the password
-     * @return returns true if the login attempt is valid
-     */
+     * @return returns true if the login attempt is valid */
     private static boolean validLogin(String username, String password) throws SQLException {
         return UserDAO.validateLoginCredentials(username, password);
     }
 
-    /**
-     * This method logs the login activity and registers whether an attempt passed or failed.
-     *
+    /** This method logs the login activity and registers whether an attempt passed or failed.
      * @param loginSuccess the login outcome
-     * @return returns whether a login attempt passed or failed
-     */
+     * @return returns whether a login attempt passed or failed */
     private boolean loginActivity(boolean loginSuccess) {
         String username = usernameTextField.getText();
         String loginOutcome;

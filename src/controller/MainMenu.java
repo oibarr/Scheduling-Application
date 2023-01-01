@@ -197,7 +197,7 @@ public class MainMenu implements Initializable {
             ModifyCustomer modifyCustomerControllerReference = loader.getController();
             modifyCustomerControllerReference.sendCust(custTable.getSelectionModel().getSelectedItem());
 
-            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Modify Customer");
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
@@ -209,13 +209,10 @@ public class MainMenu implements Initializable {
 
     }
 
-    /**
-     * This method checks for associated appointments using a customer ID.
+    /** This method checks for associated appointments using a customer ID.
      * Lambda #2: filters appointments that match the customer ID. The use of a lambda simplifies the code and aids readability.
-     *
      * @param custId the customer ID
-     * @return returns true if there is an associated appointment with the customer ID
-     */
+     * @return returns true if there is an associated appointment with the customer ID */
     //Checks for associated appointments
     public static boolean checkAssociatedApps(int custId) throws Exception {
 
@@ -227,12 +224,9 @@ public class MainMenu implements Initializable {
 
     }
 
-    /**
-     * This method deletes a Customer.
+    /** This method deletes a Customer.
      * It checks for customer appointment dependencies before deleting a Customer and allows the user to delete associated appointments as well as confirm customer deletion
-     *
-     * @param actionEvent the user clicks on the Delete button
-     */
+     * @param actionEvent the user clicks on the Delete button */
     //Checks for customer appointment dependencies before deleting a Customer; allows the user to delete associated appointments and confirm deletion of the customer
     public void onActionDeleteCust(ActionEvent actionEvent) throws Exception {
         if (custTable.getSelectionModel().getSelectedItem() != null){
@@ -266,7 +260,7 @@ public class MainMenu implements Initializable {
                         setAlert("Information", "Customer record successfully deleted");
 
                     }
-                }else{
+                } else {
                     CustomerDAO.deleteCustomer(custId);
                     custTable.getItems().clear();
                     try {
