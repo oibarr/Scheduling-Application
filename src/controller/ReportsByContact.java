@@ -4,7 +4,12 @@ import dao.AppointmentDAO;
 import javafx.fxml.Initializable;
 import model.Appointment;
 
+/**
+ * This class creates the Reports by Contact controller which extends from the Reports by Month controller.
+ */
 public class ReportsByContact extends ReportsByMonth implements Initializable {
+    /** This method filters appointments by contact and updates the total count of appointments matching the selected contact.
+     * @param appointment the appointment*/
     @Override
     public void filterSelection(Appointment appointment) {
         int totalCount = 0;
@@ -17,6 +22,7 @@ public class ReportsByContact extends ReportsByMonth implements Initializable {
         countLabel.setText("Total Count: " + totalCount);
     }
 
+    /** This method initializes the filter with all the contacts in the database. */
     @Override
     public void initializeFilter() {
 

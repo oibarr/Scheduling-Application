@@ -26,6 +26,9 @@ import java.util.ResourceBundle;
 
 import static controller.Login.setAlert;
 
+/**
+ * This class creates the Add Appointment controller.
+ */
 public class AddAppointment implements Initializable {
 
     @FXML
@@ -57,6 +60,17 @@ public class AddAppointment implements Initializable {
     protected ZoneId localZoneId = ZoneId.systemDefault();
     protected ZoneId _EST = ZoneId.of("America/New_York");
 
+    /**
+     * This method checks for overlapping appointments.
+     *
+     * @param custId       the customer ID
+     * @param appId        the appointment ID
+     * @param appStartDate the appointment start date
+     * @param appStartTime the appointment start time
+     * @param appEndDate   the appointment end date
+     * @param appEndTime   the appointment end time
+     * @return returns true if there is an overlapping appointment conflict
+     */
     public boolean appOverlapCheck(int custId, int appId, LocalDate appStartDate, LocalTime appStartTime, LocalDate appEndDate, LocalTime appEndTime) throws Exception {
 
         if (appStartDate.isBefore(LocalDate.now())) return false;
@@ -83,6 +97,11 @@ public class AddAppointment implements Initializable {
         return false;
     }
 
+    /**
+     * This method validates user inputs.
+     *
+     * @return returns true if the inputs are valid
+     */
     //Input validation
     boolean validateInputs() throws Exception {
         int appId;
@@ -152,6 +171,11 @@ public class AddAppointment implements Initializable {
         return false;
     }
 
+    /**
+     * This method saves an appointment.
+     *
+     * @param appointment the appointment
+     */
     //Creates an appointment
     public void saveAppointment(Appointment appointment) {
         AppointmentDAO.addAppointment(
@@ -166,6 +190,11 @@ public class AddAppointment implements Initializable {
                 appointment.getAppContId());
     }
 
+    /**
+     * This method executes the save appointment action and navigates back to the Main Menu.
+     *
+     * @param actionEvent the user clicks on the Save button
+     */
     //Saves appointment; navigates back to MainMenu
     public void onActionSave(ActionEvent actionEvent) {
         try {
@@ -177,18 +206,23 @@ public class AddAppointment implements Initializable {
                 stage.centerOnScreen();
                 stage.show();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This method cancels the appointment creation and navigates back to the Main Menu.
+     *
+     * @param actionEvent the user clicks on the Cancel button
+     */
     //Cancels appointment creation; navigates back to MainMenu
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Optional<ButtonType> result = setAlert("Confirmation", "Are you sure you'd like to cancel without saving?");
 
-        if(result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Scheduling Application");
             stage.centerOnScreen();
@@ -196,6 +230,10 @@ public class AddAppointment implements Initializable {
         }
     }
 
+    /**
+     * This method initializes the Add Appointment screen.
+     * It handles time conversion at initialization to display valid appointment times in the user's local time.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         id.setDisable(true);

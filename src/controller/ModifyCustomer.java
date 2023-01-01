@@ -11,8 +11,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * This class creates the Modify Customer controller which extends from the Add Customer controller.
+ */
 public class ModifyCustomer extends AddCustomer implements Initializable {
-
+    /** This method populates the division ComboBox based on country selection.
+     * @param actionEvent the user selects a Country */
     //Populates division selection based on country
     @Override
     public void onActionCountry(ActionEvent actionEvent) throws SQLException {
@@ -22,6 +26,7 @@ public class ModifyCustomer extends AddCustomer implements Initializable {
         division.setDisable(false);
     }
 
+    /** This method saves and updates the modifications to the customer. */
     //Saves modifications
     @Override
     public void saveCustomer(Customer customer) {
@@ -34,6 +39,11 @@ public class ModifyCustomer extends AddCustomer implements Initializable {
                 customer.getCustDivId());
     }
 
+    /**
+     * This method populates the Customer table with the selected customer from the Main Menu.
+     *
+     * @param selectedCust the selected customer from the Main Menu
+     */
     //Populates selection from Customer table
     public void sendCust(Customer selectedCust) throws SQLException {
         id.setText(String.valueOf(selectedCust.getCustId()));
@@ -45,6 +55,7 @@ public class ModifyCustomer extends AddCustomer implements Initializable {
         division.setValue(DivisionDAO.getDiv(selectedCust.getCustDivId()));
     }
 
+    /** This method initializes the Modify Customer screen. */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
         division.setDisable(true);

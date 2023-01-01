@@ -19,8 +19,10 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 
+/**
+ * This class creates the Reports by Type controller.
+ */
 public class ReportsByType implements Initializable {
-
     protected @FXML TableView<Appointment> appTable;
     protected @FXML Label appLabel;
     protected @FXML Label countLabel;
@@ -39,6 +41,11 @@ public class ReportsByType implements Initializable {
     protected ObservableList<Appointment> appointmentFilter = FXCollections.observableArrayList();
     protected ObservableList<Appointment> appointmentsByFilter = FXCollections.observableArrayList();
 
+    /**
+     * This method filters appointments by type and updates the total count of appointments matching the selected type.
+     *
+     * @param appointment the appointment
+     */
     public void filterSelection(Appointment appointment) {
 
         int totalCount = 0;
@@ -51,12 +58,20 @@ public class ReportsByType implements Initializable {
         countLabel.setText("Total Count: " + totalCount);
     }
 
+    /**
+     * This method executes the appointment filter and sets the appointments table with the filtered appointments.
+     *
+     * @param actionEvent the user selects an appointment type
+     */
     public void onActionCombo(ActionEvent actionEvent) {
         appointmentsByFilter.clear();
         filterSelection(appCombo.getSelectionModel().getSelectedItem());
         appTable.setItems(appointmentsByFilter);
     }
 
+    /**
+     * This method initializes the filter with all appointment types.
+     */
     public void initializeFilter() {
         try {
             appointmentFilter.addAll(AppointmentDAO.getAllAppointmentTypes());
@@ -67,6 +82,11 @@ public class ReportsByType implements Initializable {
         System.out.println("Appointment Types: " + appointmentFilter);
     }
 
+    /**
+     * This method exits the Reports screen and navigates back to the Main Menu.
+     *
+     * @param actionEvent the user clicks on the Exit button
+     */
     public void onActionExit(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -76,6 +96,10 @@ public class ReportsByType implements Initializable {
         stage.show();
     }
 
+    /**
+     * This method initializes the Reports by Type screen.
+     * It displays and counts all the appointments in the database as well as initialize the appointment filter.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appId"));
