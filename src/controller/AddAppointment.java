@@ -73,8 +73,6 @@ public class AddAppointment implements Initializable {
      */
     public boolean appOverlapCheck(int custId, int appId, LocalDate appStartDate, LocalTime appStartTime, LocalDate appEndDate, LocalTime appEndTime) throws Exception {
 
-        if (appStartDate.isBefore(LocalDate.now())) return false;
-
         ObservableList<Appointment> associatedAppointments = AppointmentDAO.getAppointmentsByCustomer(custId);
 
         LocalDateTime appStart = LocalDateTime.of(appStartDate, appStartTime);
@@ -85,16 +83,18 @@ public class AddAppointment implements Initializable {
             LocalDateTime end = a.getAppEnd();
 
             if (a.getAppId() != appId){
-                return ((start.isAfter(appStart) || start.isEqual(appStart)) && start.isBefore(appEnd))
-                        ||
-                        (end.isAfter(appStart) && (end.isBefore(appEnd) || end.isEqual(appEnd)))
-                        ||
-                        ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd)));
+                if ((start.isAfter(appStart) || (start.isEqual(appStart))) && (start.isBefore(appEnd))){
+                    return true;
+                } else if (end.isAfter(appStart) && ((end.isBefore(appEnd)) || end.isEqual(appEnd))){
+                    return true;
+                } else if ((start.isBefore(appStart) || start.isEqual(appStart)) && (end.isAfter(appEnd) || end.isEqual(appEnd))){
+                    return true;
+                }
             }
-
         }
 
         return false;
+
     }
 
     /**

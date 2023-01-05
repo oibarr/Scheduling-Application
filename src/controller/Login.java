@@ -157,6 +157,7 @@ public class Login implements Initializable {
         } else if (password.isEmpty() || password.isBlank()){
             setAlert("Error", RB.getString("BlankPassword"));
         } else if (!validUsername(username)){
+            loginActivity(false);
             setAlert("Error", RB.getString("IncorrectUsername"));
         } else if (validUsername(username)){
             if (loginActivity(validateLogin(username, password))){
