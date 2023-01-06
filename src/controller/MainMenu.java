@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import jdbc.JDBC;
@@ -35,6 +32,8 @@ import static controller.Login.setAlert;
 public class MainMenu implements Initializable {
     private final ObservableList<Appointment> Appointments = FXCollections.observableArrayList();
     private final ObservableList<Customer> Customers = FXCollections.observableArrayList();
+    ObservableList<Appointment> appSearchResults = FXCollections.observableArrayList();
+    ObservableList<Customer> custSearchResults = FXCollections.observableArrayList();
 
     @FXML
     private TableView<Appointment> appTable;
@@ -58,6 +57,8 @@ public class MainMenu implements Initializable {
     private TableColumn<Appointment, Integer> User_ID;
     @FXML
     private TableColumn<Appointment, Integer> Contact_ID;
+    @FXML
+    TextField appSearchText;
 
     @FXML
     private TableView<Customer> custTable;
@@ -73,6 +74,8 @@ public class MainMenu implements Initializable {
     private TableColumn<Customer, String> Phone;
     @FXML
     private TableColumn<Customer, Integer> Division_ID;
+    @FXML
+    TextField custSearchText;
 
     /**
      * This method clears and updates the appointments table with all appointments when the "All" radio button is selected.
@@ -401,5 +404,41 @@ public class MainMenu implements Initializable {
         }
         custTable.setItems(Customers);
 
+    }
+
+    public void onAppSearch(ActionEvent actionEvent) {
+        appSearchResults.clear();
+        searchAppointments(appSearchText.getText());
+    }
+
+    private void searchAppointments(String appTitle) {
+        if (appSearchText.getText().isBlank() || appSearchText.getText().isEmpty()){
+            appTable.setItems(Appointments);
+        } else {
+            for (Appointment a : Appointments) {
+                if (a.getAppTitle().toLowerCase().contains(appTitle.toLowerCase())){
+                    appSearchResults.add(a);
+                }
+            }
+            appTable.setItems(appSearchResults);
+        }
+    }
+
+    public void onCustSearch(ActionEvent actionEvent) {
+        custSearchResults.clear();
+        searchCustomers(custSearchText.getText());
+    }
+
+    private void searchCustomers(String custName) {
+        if (custSearchText.getText().isBlank() || custSearchText.getText().isEmpty()){
+            custTable.setItems(Customers);
+        } else {
+            for (Customer c : Customers) {
+                if (c.getCustName().toLowerCase().contains(custName.toLowerCase())){
+                    custSearchResults.add(c);
+                }
+            }
+            custTable.setItems(custSearchResults);
+        }
     }
 }

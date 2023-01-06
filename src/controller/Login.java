@@ -178,7 +178,7 @@ public class Login implements Initializable {
     public void onActionLogin(ActionEvent actionEvent) throws Exception {
 
         if (validateInputs()){
-            Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenuSearch.fxml"));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Scheduling Application");
             stage.setScene(new Scene(root));
